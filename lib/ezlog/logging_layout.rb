@@ -1,4 +1,6 @@
 require 'time'
+require 'multi_json'
+require 'logging'
 
 module Ezlog
   class LoggingLayout < ::Logging::Layout
