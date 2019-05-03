@@ -1,12 +1,12 @@
 require 'ezlog/sidekiq/job_logger'
 
-class TestWorker
-  def perform(customer_id, name)
-  end
-end
-
 RSpec.describe Ezlog::Sidekiq::JobLogger do
   let(:job_logger) { Ezlog::Sidekiq::JobLogger.new }
+
+  class TestWorker
+    def perform(customer_id, name)
+    end
+  end
 
   around do |example|
     existing_logger = Sidekiq.logger
