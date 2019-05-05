@@ -43,5 +43,11 @@ RSpec.describe Ezlog::Sidekiq::JobLogger do
                                                         created_at: now,
                                                         enqueued_at: now).at_level(:info)
     end
+
+    it 'logs the start message before dispatching the job' do
+      job_logger.call(item, queue) do
+        log_output_is_expected.to include_log_message message: 'Job started'
+      end
+    end
   end
 end
