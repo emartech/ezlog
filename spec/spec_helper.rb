@@ -1,8 +1,6 @@
 require "bundler/setup"
 require "ezlog"
-require 'rspec/logging_helper'
-
-Dir.glob(File.join(File.dirname(__FILE__),'support', '*', '**', '*.rb')).each { |path| require(path) }
+require "ezlog/rspec"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -13,13 +11,5 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
-  end
-
-  config.include RSpec::Helpers::LoggingHelper
-  config.include RSpec::LoggingHelper
-
-  config.before(:suite) do
-    Logging.appenders.string_io('stringio', layout: Ezlog::LoggingLayout.new)
-    config.capture_log_messages to: 'stringio'
   end
 end
