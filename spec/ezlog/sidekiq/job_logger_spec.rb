@@ -89,16 +89,16 @@ RSpec.describe Ezlog::Sidekiq::JobLogger do
     context 'when there is an error processing the job' do
       it 'lets the error through and logs a failure message with timing' do
         allow(::Process).to receive(:clock_gettime).with(Process::CLOCK_MONOTONIC).and_return(1.0, 2.0)
-        expect { job_logger.call(item, queue) { raise StandardError } }.to raise_error(StandardError)
-                                                                             .and log(message: 'TestWorker failed',
-                                                                                      jid: 'job id',
-                                                                                      queue: 'job queue',
-                                                                                      worker: 'TestWorker',
-                                                                                      customer_id: 1,
-                                                                                      name: 'name param',
-                                                                                      created_at: now,
-                                                                                      enqueued_at: now,
-                                                                                      duration_sec: 1.0).at_level(:info)
+        expect { job_logger.call(item, queue) { raise Exception } }.to raise_error(Exception)
+                                                                         .and log(message: 'TestWorker failed',
+                                                                                  jid: 'job id',
+                                                                                  queue: 'job queue',
+                                                                                  worker: 'TestWorker',
+                                                                                  customer_id: 1,
+                                                                                  name: 'name param',
+                                                                                  created_at: now,
+                                                                                  enqueued_at: now,
+                                                                                  duration_sec: 1.0).at_level(:info)
 
 
       end
