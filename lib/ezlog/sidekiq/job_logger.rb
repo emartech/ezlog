@@ -4,16 +4,27 @@ module Ezlog
   module Sidekiq
     class JobLogger
       def call(item, queue)
-        logger.info log_message(item, 'Job started')
-        yield
+        within_log_context_of(item) do
+          logger.info "#{item['class']} started"
+          benchmark { yield }
+          logger.info message: "#{item['class']} finished"
+        rescue Exception
+          logger.info message: "#{item['class']} failed"
+          raise
+        end
       end
 
       private
 
-      def log_message(job, message)
-        basic_info_for(job)
-          .merge(arguments_of(job))
-          .merge(message: message)
+      def within_log_context_of(item)
+        Logging.mdc.push log_context(item)
+        yield
+      ensure
+        Logging.mdc.pop
+      end
+
+      def log_context(job)
+        basic_info_for(job).merge arguments_of(job)
       end
 
       def basic_info_for(job)
@@ -28,18 +39,26 @@ module Ezlog
 
       def arguments_of(job)
         {}.tap do |arguments|
-          perform_parameters_of(job).each_with_index do |(_, param_name), index|
+          method_parameters_of(job).each_with_index do |(_, param_name), index|
             arguments[param_name] = job['args'][index]
           end
         end
       end
 
-      def perform_parameters_of(job)
+      def method_parameters_of(job)
         Kernel.const_get(job['class'].to_sym).instance_method(:perform).parameters
       end
 
       def logger
         ::Sidekiq.logger
+      end
+
+      def benchmark
+        start_time = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC)
+        yield
+      ensure
+        end_time = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC)
+        Logging.mdc[:duration_sec] = (end_time - start_time).round(3)
       end
     end
   end

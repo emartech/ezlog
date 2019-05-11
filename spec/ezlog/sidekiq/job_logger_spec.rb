@@ -34,7 +34,7 @@ RSpec.describe Ezlog::Sidekiq::JobLogger do
     end
 
     it 'logs a start message' do
-      expect { job_logger.call(item, queue) {} }.to log(message: 'Job started',
+      expect { job_logger.call(item, queue) {} }.to log(message: 'TestWorker started',
                                                         jid: 'job id',
                                                         queue: 'job queue',
                                                         worker: 'TestWorker',
@@ -46,7 +46,61 @@ RSpec.describe Ezlog::Sidekiq::JobLogger do
 
     it 'logs the start message before dispatching the job' do
       job_logger.call(item, queue) do
-        log_output_is_expected.to include_log_message message: 'Job started'
+        log_output_is_expected.to include_log_message message: 'TestWorker started'
+      end
+    end
+
+    it 'logs a finish message with timing' do
+      allow(::Process).to receive(:clock_gettime).with(Process::CLOCK_MONOTONIC).and_return(1.0, 3.666666)
+      expect { job_logger.call(item, queue) {} }.to log(message: 'TestWorker finished',
+                                                        jid: 'job id',
+                                                        queue: 'job queue',
+                                                        worker: 'TestWorker',
+                                                        customer_id: 1,
+                                                        name: 'name param',
+                                                        created_at: now,
+                                                        enqueued_at: now,
+                                                        duration_sec: 2.667).at_level(:info)
+    end
+
+    context 'when the job itself logs a message' do
+      it "includes the context information of the job" do
+        expect do
+          job_logger.call(item, queue) { Sidekiq.logger.info 'Message during processing' }
+        end.to log(message: 'Message during processing',
+                   jid: 'job id',
+                   queue: 'job queue',
+                   worker: 'TestWorker',
+                   customer_id: 1,
+                   name: 'name param',
+                   created_at: now,
+                   enqueued_at: now).at_level(:info)
+      end
+    end
+
+    context 'when something is logged after the job is finished' do
+      it "does not include the - already executed - job's context information" do
+        job_logger.call(item, queue) {}
+        expect { Sidekiq.logger.info 'Message after processing' }.not_to log message: 'Message after processing',
+                                                                             jid: 'job id'
+      end
+    end
+
+    context 'when there is an error processing the job' do
+      it 'lets the error through and logs a failure message with timing' do
+        allow(::Process).to receive(:clock_gettime).with(Process::CLOCK_MONOTONIC).and_return(1.0, 2.0)
+        expect { job_logger.call(item, queue) { raise StandardError } }.to raise_error(StandardError)
+                                                                             .and log(message: 'TestWorker failed',
+                                                                                      jid: 'job id',
+                                                                                      queue: 'job queue',
+                                                                                      worker: 'TestWorker',
+                                                                                      customer_id: 1,
+                                                                                      name: 'name param',
+                                                                                      created_at: now,
+                                                                                      enqueued_at: now,
+                                                                                      duration_sec: 1.0).at_level(:info)
+
+
       end
     end
   end
