@@ -44,8 +44,6 @@ module Ezlog
       case obj
       when Exception
         exception_message_by(obj)
-      when Time
-        {message: obj.iso8601}
       when Hash
         obj
       else
