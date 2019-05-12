@@ -1,4 +1,4 @@
 require 'ezlog/version'
 require 'ezlog/logging_layout'
 
-require 'ezlog/sidekiq/job_logger' if defined? ::Sidekiq
+require 'ezlog/railtie' if defined? Rails
