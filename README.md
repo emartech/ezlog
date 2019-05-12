@@ -66,24 +66,29 @@ it will automatically be appended to all log messages emitted by the application
 
 #### Configures Sidekiq logging
 
-Ezlog comes with its own job logger for [Sidekiq](https://github.com/mperham/sidekiq) which does several things that 
-come in very handy when working with background jobs.
+Ezlog configures the `Sidekiq.logger` to be an instance of a [Logging](https://github.com/TwP/logging) logger by the name
+of `Sidekiq`, behaving as described above. It also comes with its own job logger for [Sidekiq](https://github.com/mperham/sidekiq) 
+which does several things that come in very handy when working with background jobs.
  
 * It emits two log messages per job run; one when the job is started and another one when the job is finished (successfully or unsuccessfuly).
 * It measures the time it took to execute the job and appends the benchmark information to the final log message.
 * It adds all basic information about the job (worker, queue, JID, created_at, enqueued_at) to the log context so
 all log messages emitted during the execution of the job will contain this information.
-* It also adds all of the job's parameters to the log context, which means that all log messages emitted during the execution
-of the job will contain this information as well.
+* It also adds all of the job's parameters (by name) to the log context, which means that all log messages emitted 
+during the execution of the job will contain this information as well.
 
 ```ruby
 class TestWorker
-  def perform(customer_id, name)
+  def perform(customer_id)
+    logger.warn 'Customer not found'
   end
 end
 
-#=> {"logger":"Sidekiq","timestamp":"2019-05-12T10:38:10+02:00","level":"INFO","hostname":"MacbookPro.local","pid":75538,"jid":"job id","queue":"job queue","worker":"TestWorker","created_at":"2019-05-12 10:38:10 +0200","enqueued_at":"2019-05-12 10:38:10 +0200","customer_id":1,"name":"name param","message":"TestWorker started"}
-#=> {"logger":"Sidekiq","timestamp":"2019-05-12T10:38:12+02:00","level":"INFO","hostname":"MacbookPro.local","pid":75538,"jid":"job id","queue":"job queue","worker":"TestWorker","created_at":"2019-05-12 10:38:10 +0200","enqueued_at":"2019-05-12 10:38:10 +0200","customer_id":1,"name":"name param","duration_sec":2.667,"message":"TestWorker finished"}
+TestWorker.perform_async 42
+
+#=> {"logger":"Sidekiq","timestamp":"2019-05-12T10:38:10+02:00","level":"INFO","hostname":"MacbookPro.local","pid":75538,"jid":"abcdef1234567890","queue":"default","worker":"TestWorker","created_at":"2019-05-12 10:38:10 +0200","enqueued_at":"2019-05-12 10:38:10 +0200","customer_id":42,"message":"TestWorker started"}
+#=> {"logger":"Sidekiq","timestamp":"2019-05-12T10:38:10+02:00","level":"WARN","hostname":"MacbookPro.local","pid":75538,"jid":"abcdef1234567890","queue":"default","worker":"TestWorker","created_at":"2019-05-12 10:38:10 +0200","enqueued_at":"2019-05-12 10:38:10 +0200","customer_id":42,"message":"Customer not found"}
+#=> {"logger":"Sidekiq","timestamp":"2019-05-12T10:38:12+02:00","level":"INFO","hostname":"MacbookPro.local","pid":75538,"jid":"abcdef1234567890","queue":"default","worker":"TestWorker","created_at":"2019-05-12 10:38:10 +0200","enqueued_at":"2019-05-12 10:38:10 +0200","customer_id":42,"duration_sec":2.667,"message":"TestWorker finished"}
 ```
 
 #### Configures Rack::Timeout logging
@@ -98,4 +103,4 @@ Ezlog is highly opinionated software and does in no way aim or claim to be usefu
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+The gem is available as open source under the terms of the MIT License - see the [LICENSE](/LICENSE.txt) file for the full text.
