@@ -29,7 +29,7 @@ gem 'ezlog'
 #### Initializes the Logging library
 
 Ezlog sets up [Logging](https://github.com/TwP/logging)'s root logger to have an appender that writes to STDOUT.
-Any loggers created by the application will inherit this appender and will thus, write their logs to STDOUT.
+Any loggers created by the application will inherit this appender and will thus write their logs to STDOUT.
 Ezlog also comes with its own log layout, which it uses to output messages sent to the STDOUT appender. This layout
 does several very useful things to make our lives easier:
 
@@ -88,8 +88,8 @@ end
 
 #### Configures Rack::Timeout logging
 
-[Rack::Timeout](https://github.com/heroku/rack-timeout) is a very useful tool to people running services on Heroku
-but it is way too verbose by default. What Ezlog does is simple reconfigure its logging to use Ezlog's logging
+[Rack::Timeout](https://github.com/heroku/rack-timeout) is a very useful tool for people running services on Heroku
+but it is way too verbose by default. What Ezlog does is simply reconfigure its logging to use Ezlog's logging
 mechanism and to only output messages at or above WARN level. 
 
 ## Disclaimer
