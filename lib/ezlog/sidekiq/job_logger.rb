@@ -33,7 +33,8 @@ module Ezlog
           'queue' => job['queue'],
           'worker' => job['class'],
           'created_at' => job['created_at'],
-          'enqueued_at' => job['enqueued_at']
+          'enqueued_at' => job['enqueued_at'],
+          'run_count' => (job['retry_count'] || -1) + 2
         }
       end
 

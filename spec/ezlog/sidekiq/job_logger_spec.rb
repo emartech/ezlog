@@ -44,6 +44,17 @@ RSpec.describe Ezlog::Sidekiq::JobLogger do
                                                         enqueued_at: now).at_level(:info)
     end
 
+    it 'logs the number of times this job has run' do
+      expect { job_logger.call(item, queue) {} }.to log(run_count: 1).at_level(:info)
+    end
+
+    context 'when the job has already been retried' do
+      it 'logs the number of times this job has run' do
+        item['retry_count'] = 0
+        expect { job_logger.call(item, queue) {} }.to log(run_count: 2).at_level(:info)
+      end
+    end
+
     it 'logs the start message before dispatching the job' do
       job_logger.call(item, queue) do
         log_output_is_expected.to include_log_message message: 'TestWorker started'
@@ -74,7 +85,8 @@ RSpec.describe Ezlog::Sidekiq::JobLogger do
                                             customer_id: 1,
                                             name: 'name param',
                                             created_at: now,
-                                            enqueued_at: now).at_level(:info)
+                                            enqueued_at: now,
+                                            run_count: 1).at_level(:info)
       end
     end
 
