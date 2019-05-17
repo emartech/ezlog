@@ -21,11 +21,15 @@ module Ezlog
     private
 
     def initialize_sidekiq_logging
-      ::Sidekiq.logger = Logging.logger['Sidekiq']
+      require 'ezlog/sidekiq/job_logger'
+      require 'ezlog/sidekiq/error_logger'
+
+      ::Sidekiq.logger = ::Logging.logger['Sidekiq']
       ::Sidekiq.logger.level = :info
       ::Sidekiq.configure_server do |config|
-        require 'ezlog/sidekiq/job_logger'
         config.options[:job_logger] = Ezlog::Sidekiq::JobLogger
+        config.error_handlers << Ezlog::Sidekiq::ErrorLogger.new
+        config.error_handlers.delete_if { |handler| handler.is_a? ::Sidekiq::ExceptionHandler::Logger }
       end
     end
 
