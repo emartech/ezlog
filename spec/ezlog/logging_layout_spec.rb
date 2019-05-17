@@ -4,8 +4,8 @@ RSpec.describe Ezlog::LoggingLayout do
 
   let(:message) { 'Hello, World!' }
   let(:logger_name) { 'TestLogger' }
-  let(:level_name) {  Logging::LEVELS.keys.sample }
-  let(:event) { Logging::LogEvent.new(logger_name,  Logging::LEVELS[level_name], message, false) }
+  let(:level_name) { Logging::LEVELS.keys.sample }
+  let(:event) { Logging::LogEvent.new(logger_name, Logging::LEVELS[level_name], message, false) }
 
   define :json_include do
     match { expect(JSON.parse(actual)).to include expected }
@@ -24,12 +24,12 @@ RSpec.describe Ezlog::LoggingLayout do
     it { is_expected.to match(/\n$/) }
 
     context 'when message context is given upon creation' do
-      let(:context) { { environment: 'test' } }
+      let(:context) { {environment: 'test'} }
 
       it { is_expected.to json_include 'environment' => 'test' }
 
       context 'when some part of the context is also present in the message' do
-        let(:message) { { environment: 'demo' } }
+        let(:message) { {environment: 'demo'} }
 
         it { is_expected.to json_include 'environment' => 'demo' }
       end
@@ -52,8 +52,16 @@ RSpec.describe Ezlog::LoggingLayout do
       let(:backtrace) { [] }
       before { message.set_backtrace(backtrace) }
 
-      it { is_expected.to json_include 'error' => { 'class' => message.class.to_s, 'message' => message.message, 'backtrace' => message.backtrace } }
+      it { is_expected.to json_include 'error' => {'class' => message.class.to_s, 'message' => message.message, 'backtrace' => message.backtrace} }
       it { is_expected.to json_include 'message' => message.message }
+
+      context 'when the exception has no backtrace' do
+        let(:backtrace) { nil }
+
+        it 'does not fail' do
+          expect { format }.not_to raise_error
+        end
+      end
 
       context 'when the exception has a long backtrace' do
         let(:backtrace) { 1.upto(25).map { |counter| "*line##{counter}*" } }
@@ -75,7 +83,7 @@ RSpec.describe Ezlog::LoggingLayout do
       it { is_expected.to json_include Logging.mdc.context }
 
       context 'when some part of the context is also present in the message' do
-        let(:message) { { 'X-Session' => 'qwe456' } }
+        let(:message) { {'X-Session' => 'qwe456'} }
 
         it { is_expected.to json_include 'X-Session' => 'qwe456' }
       end

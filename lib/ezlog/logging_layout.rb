@@ -56,7 +56,7 @@ module Ezlog
         error: {
           class: exception.class.name,
           message: exception.message,
-          backtrace: exception.backtrace.first(20)
+          backtrace: exception.backtrace&.first(20)
         }
       }
     end
