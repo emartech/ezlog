@@ -1,5 +1,3 @@
-require 'ezlog/sidekiq/job_logger'
-
 RSpec.describe Ezlog::Sidekiq::JobLogger do
   let(:job_logger) { Ezlog::Sidekiq::JobLogger.new }
 
@@ -33,26 +31,8 @@ RSpec.describe Ezlog::Sidekiq::JobLogger do
       expect { |block| job_logger.call(item, queue, &block) }.to yield_control
     end
 
-    it 'logs a start message' do
-      expect { job_logger.call(item, queue) {} }.to log(message: 'TestWorker started',
-                                                        jid: 'job id',
-                                                        queue: 'job queue',
-                                                        worker: 'TestWorker',
-                                                        customer_id: 1,
-                                                        name: 'name param',
-                                                        created_at: now,
-                                                        enqueued_at: now).at_level(:info)
-    end
-
-    it 'logs the number of times this job has run' do
-      expect { job_logger.call(item, queue) {} }.to log(run_count: 1).at_level(:info)
-    end
-
-    context 'when the job has already been retried' do
-      it 'logs the number of times this job has run' do
-        item['retry_count'] = 0
-        expect { job_logger.call(item, queue) {} }.to log(run_count: 2).at_level(:info)
-      end
+    it 'logs a start message including the job context' do
+      expect { job_logger.call(item, queue) {} }.to log(message: 'TestWorker started', jid: 'job id').at_level(:info)
     end
 
     it 'logs the start message before dispatching the job' do
@@ -61,16 +41,10 @@ RSpec.describe Ezlog::Sidekiq::JobLogger do
       end
     end
 
-    it 'logs a finish message with timing' do
+    it 'logs a finish message with job context and timing' do
       allow(::Process).to receive(:clock_gettime).with(Process::CLOCK_MONOTONIC).and_return(1.0, 3.666666)
       expect { job_logger.call(item, queue) {} }.to log(message: 'TestWorker finished',
                                                         jid: 'job id',
-                                                        queue: 'job queue',
-                                                        worker: 'TestWorker',
-                                                        customer_id: 1,
-                                                        name: 'name param',
-                                                        created_at: now,
-                                                        enqueued_at: now,
                                                         duration_sec: 2.667).at_level(:info)
     end
 
@@ -78,15 +52,7 @@ RSpec.describe Ezlog::Sidekiq::JobLogger do
       let(:call_with_logging) { job_logger.call(item, queue) { Sidekiq.logger.info 'Message during processing' } }
 
       it 'includes the context information of the job' do
-        expect { call_with_logging }.to log(message: 'Message during processing',
-                                            jid: 'job id',
-                                            queue: 'job queue',
-                                            worker: 'TestWorker',
-                                            customer_id: 1,
-                                            name: 'name param',
-                                            created_at: now,
-                                            enqueued_at: now,
-                                            run_count: 1).at_level(:info)
+        expect { call_with_logging }.to log(message: 'Message during processing', jid: 'job id').at_level(:info)
       end
     end
 
@@ -101,18 +67,11 @@ RSpec.describe Ezlog::Sidekiq::JobLogger do
     context 'when there is an error processing the job' do
       let(:call_with_exception) { job_logger.call(item, queue) { raise Exception } }
 
-      it 'lets the error through and logs a failure message with timing' do
+      it 'lets the error through and logs a failure message with job context and timing' do
         allow(::Process).to receive(:clock_gettime).with(Process::CLOCK_MONOTONIC).and_return(1.0, 2.0)
-        expect { call_with_exception }.to raise_error(Exception)
-                                            .and log(message: 'TestWorker failed',
-                                                     jid: 'job id',
-                                                     queue: 'job queue',
-                                                     worker: 'TestWorker',
-                                                     customer_id: 1,
-                                                     name: 'name param',
-                                                     created_at: now,
-                                                     enqueued_at: now,
-                                                     duration_sec: 1.0).at_level(:info)
+        expect { call_with_exception }.to raise_error(Exception).and log(message: 'TestWorker failed',
+                                                                         jid: 'job id',
+                                                                         duration_sec: 1.0).at_level(:info)
       end
     end
   end

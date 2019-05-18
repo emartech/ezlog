@@ -21,9 +21,6 @@ module Ezlog
     private
 
     def initialize_sidekiq_logging
-      require 'ezlog/sidekiq/job_logger'
-      require 'ezlog/sidekiq/error_logger'
-
       ::Sidekiq.logger = ::Logging.logger['Sidekiq']
       ::Sidekiq.logger.level = :info
       ::Sidekiq.configure_server do |config|

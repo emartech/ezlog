@@ -1,5 +1,3 @@
-require 'ezlog/sidekiq/error_logger'
-
 RSpec.describe Ezlog::Sidekiq::ErrorLogger, type: :logger do
   subject(:logger) { Ezlog::Sidekiq::ErrorLogger.new }
 
