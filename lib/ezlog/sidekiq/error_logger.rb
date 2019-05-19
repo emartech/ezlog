@@ -3,8 +3,12 @@ require 'sidekiq'
 module Ezlog
   module Sidekiq
     class ErrorLogger
-      def call(error, job_hash)
-        ::Sidekiq.logger.warn error
+      include LogContextHelper
+
+      def call(error, context)
+        within_log_context(JobContext.from_job_hash(context[:job])) do
+          ::Sidekiq.logger.warn error
+        end
       end
     end
   end
