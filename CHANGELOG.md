@@ -5,7 +5,7 @@
 * Features & enhancements
   * [Sidekiq](https://github.com/mperham/sidekiq) error handler now logs the same job context as the JobLogger
 
-### 0.2.1
+### 0.2.1 (2019-05-17)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v.0.2.0...v0.2.1)
 
@@ -17,7 +17,7 @@
 * Bug fixes
   * Fix bug where exceptions without a backtrace would not get logged
 
-### 0.2.0
+### 0.2.0 (2019-05-12)
 
 First version of the gem including the following:
 
