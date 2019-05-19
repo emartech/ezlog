@@ -7,10 +7,13 @@ Gem::Specification.new do |spec|
   spec.version       = Ezlog::VERSION
   spec.authors       = ["Zoltan Ormandi"]
   spec.email         = ["zoltan.ormandi@emarsys.com"]
-
   spec.summary       = "A zero-configuration logging solution for projects using Sidekiq, Rails, Sequel, etc."
   spec.homepage      = "https://github.com/emartech/ezlog"
   spec.license       = "MIT"
+
+  spec.metadata      = {
+    "changelog_uri" => "https://github.com/emartech/ezlog/blob/master/CHANGELOG.md",
+  }
 
   spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
