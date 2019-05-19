@@ -1,5 +1,8 @@
 # Ezlog
 
+[![Gem Version](https://badge.fury.io/rb/ezlog.svg)](https://badge.fury.io/rb/ezlog)
+[![Build Status](https://travis-ci.com/emartech/ezlog.svg?branch=master)](https://travis-ci.com/emartech/ezlog)
+
 Ezlog is intended to be a zero-configuration logging setup for pure Ruby or Rails projects using 
 [Sidekiq](https://github.com/mperham/sidekiq), [Rack::Timeout](https://github.com/heroku/rack-timeout),
 [Sequel](https://sequel.jeremyevans.net/), etc. It uses Tim Pease's wonderful [Logging](https://github.com/TwP/logging)
