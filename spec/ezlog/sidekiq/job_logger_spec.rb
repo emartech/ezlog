@@ -14,42 +14,40 @@ RSpec.describe Ezlog::Sidekiq::JobLogger do
   end
 
   describe '#call' do
-    let(:now) { Time.now }
     let(:item) do
       {
         'jid' => 'job id',
         'queue' => 'job queue',
         'class' => 'TestWorker',
         'args' => [1, 'name param'],
-        'created_at' => now,
-        'enqueued_at' => now
+        'created_at' => Time.now,
+        'enqueued_at' => Time.now
       }
     end
-    let(:queue) { :queue }
 
     it 'yields the block it was called with' do
-      expect { |block| job_logger.call(item, queue, &block) }.to yield_control
+      expect { |block| job_logger.call(item, :queue, &block) }.to yield_control
     end
 
     it 'logs a start message including the job context' do
-      expect { job_logger.call(item, queue) {} }.to log(message: 'TestWorker started', jid: 'job id').at_level(:info)
+      expect { job_logger.call(item, :queue) {} }.to log(message: 'TestWorker started', jid: 'job id').at_level(:info)
     end
 
     it 'logs the start message before dispatching the job' do
-      job_logger.call(item, queue) do
+      job_logger.call(item, :queue) do
         log_output_is_expected.to include_log_message message: 'TestWorker started'
       end
     end
 
     it 'logs a finish message with job context and timing' do
       allow(::Process).to receive(:clock_gettime).with(Process::CLOCK_MONOTONIC).and_return(1.0, 3.666666)
-      expect { job_logger.call(item, queue) {} }.to log(message: 'TestWorker finished',
+      expect { job_logger.call(item, :queue) {} }.to log(message: 'TestWorker finished',
                                                         jid: 'job id',
                                                         duration_sec: 2.667).at_level(:info)
     end
 
     context 'when the job itself logs a message' do
-      let(:call_with_logging) { job_logger.call(item, queue) { Sidekiq.logger.info 'Message during processing' } }
+      let(:call_with_logging) { job_logger.call(item, :queue) { Sidekiq.logger.info 'Message during processing' } }
 
       it 'includes the context information of the job' do
         expect { call_with_logging }.to log(message: 'Message during processing', jid: 'job id').at_level(:info)
@@ -58,14 +56,14 @@ RSpec.describe Ezlog::Sidekiq::JobLogger do
 
     context 'when something is logged after the job is finished' do
       it "does not include the - already executed - job's context information" do
-        job_logger.call(item, queue) {}
+        job_logger.call(item, :queue) {}
         expect { Sidekiq.logger.info 'Message after processing' }.not_to log message: 'Message after processing',
                                                                              jid: 'job id'
       end
     end
 
     context 'when there is an error processing the job' do
-      let(:call_with_exception) { job_logger.call(item, queue) { raise Exception } }
+      let(:call_with_exception) { job_logger.call(item, :queue) { raise Exception } }
 
       it 'lets the error through and logs a failure message with job context and timing' do
         allow(::Process).to receive(:clock_gettime).with(Process::CLOCK_MONOTONIC).and_return(1.0, 2.0)
