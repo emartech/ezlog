@@ -1,25 +1,20 @@
 RSpec.describe Ezlog::Sidekiq::JobContext do
-  class TestWorker
-    def perform(customer_id, name)
-    end
-  end
+  include_context 'Sidekiq'
 
   describe '.from_job_hash' do
     subject(:job_message) { Ezlog::Sidekiq::JobContext.from_job_hash job_hash }
     let(:job_hash) do
-      {
-        'jid' => 'job id',
-        'queue' => 'job queue',
-        'class' => 'TestWorker',
-        'args' => [1, 'name param'],
-        'created_at' => now,
-        'enqueued_at' => now
-      }
+      sidekiq_job_hash jid: 'job ID',
+                       queue: 'job queue',
+                       worker: 'TestWorker',
+                       args: [1, 'name param'],
+                       created_at: now,
+                       enqueued_at: now
     end
     let(:now) { Time.now }
 
-    it 'contains all relevant information about the job' do
-      expect(job_message).to include(jid: 'job id',
+    it 'contains all relevant information about the job, including its parameters by name' do
+      expect(job_message).to include(jid: 'job ID',
                                      queue: 'job queue',
                                      worker: 'TestWorker',
                                      customer_id: 1,

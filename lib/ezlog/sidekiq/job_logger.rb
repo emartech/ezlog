@@ -5,13 +5,13 @@ module Ezlog
     class JobLogger
       include LogContextHelper
 
-      def call(item, queue)
-        within_log_context(JobContext.from_job_hash(item)) do
-          logger.info "#{item['class']} started"
+      def call(job_hash, queue)
+        within_log_context(JobContext.from_job_hash(job_hash)) do
+          logger.info "#{job_hash['class']} started"
           benchmark { yield }
-          logger.info message: "#{item['class']} finished"
+          logger.info message: "#{job_hash['class']} finished"
         rescue Exception
-          logger.info message: "#{item['class']} failed"
+          logger.info message: "#{job_hash['class']} failed"
           raise
         end
       end
