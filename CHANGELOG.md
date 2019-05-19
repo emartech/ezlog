@@ -1,13 +1,13 @@
 ### 0.2.2 (in development)
 
-[Full Changelog](https://github.com/emartech/ezlog/compare/v.0.2.0...master)
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.2.1...master)
 
 * Features & enhancements
   * [Sidekiq](https://github.com/mperham/sidekiq) error handler now logs the same job context as the JobLogger
 
 ### 0.2.1 (2019-05-17)
 
-[Full Changelog](https://github.com/emartech/ezlog/compare/v.0.2.0...v0.2.1)
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.2.0...v0.2.1)
 
 * Features & enhancements
   * Provide logger creation mechanism so that projects don't explicitly depend on [Logging](https://github.com/TwP/logging)
