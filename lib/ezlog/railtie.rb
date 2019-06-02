@@ -15,8 +15,10 @@ module Ezlog
     end
 
     config.before_configuration do |app|
-      app.config.logger = ::Logging.logger['Application']
+      rails_logger = Ezlog.logger('Application')
+      app.config.logger = rails_logger
       app.config.middleware.swap ActionDispatch::DebugExceptions, Ezlog::Rails::DebugExceptions
+      app.config.middleware.insert_after Ezlog::Rails::DebugExceptions, Ezlog::Rails::LogExceptions, rails_logger
     end
 
     private

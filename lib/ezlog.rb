@@ -10,6 +10,6 @@ module Ezlog
   autoload :Sidekiq, 'ezlog/sidekiq'
 
   def self.logger(name)
-    Logging::Logger[name]
+    ::Logging::Logger[name]
   end
 end
