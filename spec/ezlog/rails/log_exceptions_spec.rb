@@ -1,5 +1,5 @@
 RSpec.describe Ezlog::Rails::LogExceptions do
-  subject(:middleware) { described_class.new app, Ezlog.logger(self) }
+  subject(:middleware) { described_class.new app, Ezlog.logger('LogExceptions') }
   let(:app) { double 'application' }
 
   describe '#call' do
@@ -16,7 +16,8 @@ RSpec.describe Ezlog::Rails::LogExceptions do
       before { allow(app).to receive(:call).and_raise Exception, 'test message' }
 
       it 'logs the exception and allows it to pass through' do
-        expect { call }.to raise_error(Exception, 'test message').and log(message: 'test message').at_level(:error)
+        expect { call }.to raise_error(Exception, 'test message').and log(message: 'test message',
+                                                                          logger: 'LogExceptions').at_level(:error)
       end
     end
   end
