@@ -17,9 +17,7 @@ RSpec.describe Ezlog::Rails::AccessLog do
     let(:headers) { double 'header' }
     let(:body) { double 'body' }
 
-    before {
-      allow(app).to receive(:call).with(env).and_return([status, headers, body])
-    }
+    before { allow(app).to receive(:call).with(env).and_return([status, headers, body]) }
 
     it 'calls the next middleware in the stack and returns the results' do
       expect(call).to eq [status, headers, body]
