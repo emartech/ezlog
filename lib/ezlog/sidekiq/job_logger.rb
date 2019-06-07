@@ -5,7 +5,7 @@ module Ezlog
     class JobLogger
       include LogContextHelper
 
-      def call(job_hash, queue)
+      def call(job_hash, _queue)
         within_log_context(JobContext.from_job_hash(job_hash)) do
           logger.info "#{job_hash['class']} started"
           benchmark { yield }
