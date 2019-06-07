@@ -23,6 +23,11 @@ module Ezlog
       app.config.middleware.insert_after Ezlog::Rails::DebugExceptions, Ezlog::Rails::LogExceptions, rails_logger
     end
 
+    config.after_initialize do
+      Ezlog::Rails::LogSubscriber.detach ::ActionController::LogSubscriber
+      Ezlog::Rails::LogSubscriber.detach ::ActionView::LogSubscriber
+    end
+
     private
 
     def initialize_sidekiq_logging
