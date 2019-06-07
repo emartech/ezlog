@@ -1,3 +1,15 @@
+### 0.3.0 (in development)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.2.2...v0.3.0)
+
+* Features & enhancements
+  * Unified access log for Rails
+    * 1 message per request
+    * Includes request ID, parameters, response code
+  * Non-verbose logging of uncaught exceptions in Rails apps
+    * 1 message per error
+    * Use ERROR level instead of FATAL
+
 ### 0.2.2 (2019-05-19)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.2.1...v0.2.2)
