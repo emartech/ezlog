@@ -64,8 +64,17 @@ logger.error ex
 
 Ezlog configures the `Rails.logger` to be an instance of a [Logging](https://github.com/TwP/logging) logger by the name 
 of `Application`, behaving as described above. The logger uses the log level set in `application.rb` (if present) or 
-uses INFO as a default log level. It also adds the environment (`Rails.env`) to the logger's initial context, meaning
-it will automatically be appended to all log messages emitted by the application.
+uses INFO as a default log level.
+
+In addition to this, Ezlog also does the following:
+* It adds the environment (`Rails.env`) to the logger's initial context, so it will automatically be appended to all log messages emitted by the application.
+* It disables Rails's default (verbose) uncaught error logging and injects its own error logger into the application, which
+  * logs 1 line per error, including the error's name and context (stack trace, etc.),
+  * logs every error at ERROR level instead of the default FATAL.
+* It disables Rails's default (verbose) request logging, which logs several lines per event during the processing of an action
+  and replaces the default Rack access log with its own access log middleware. The end result is an access log, which
+  * has 1 log line per request, logged at the end of the request,
+  * contains all relevant information (request ID, method, path, params, client IP, response code and duration).
 
 #### Configures Sidekiq logging
 
