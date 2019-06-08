@@ -27,6 +27,11 @@ RSpec.describe Ezlog::Rails::AccessLog do
                              response_code: 200
     end
 
+    it 'logs the request duration' do
+      allow(::Process).to receive(:clock_gettime).with(Process::CLOCK_MONOTONIC).and_return(1.0, 3.666666)
+      expect { call }.to log duration_sec: 2.667
+    end
+
     context 'when the params contain sensitive information' do
       before do
         env['QUERY_STRING'] = 'password=test_pass'
