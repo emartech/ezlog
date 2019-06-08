@@ -11,7 +11,7 @@ module Ezlog
     end
 
     initializer 'ezlog.configure_rack_timeout_logging' do
-      initialize_rack_timeout_logging if defined? ::Rack::Timeout
+      disable_rack_timeout_logging if defined? ::Rack::Timeout
     end
 
     config.before_configuration do |app|
@@ -40,9 +40,8 @@ module Ezlog
       end
     end
 
-    def initialize_rack_timeout_logging
-      ::Rack::Timeout::Logger.logger = ::Logging.logger['rack-timeout']
-      ::Rack::Timeout::Logger.logger.level = :warn
+    def disable_rack_timeout_logging
+      ::Rack::Timeout::Logger.logger = ::Logger.new(nil)
     end
   end
 end
