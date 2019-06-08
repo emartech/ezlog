@@ -30,7 +30,7 @@ module Ezlog
                      method: request.method,
                      path: request.filtered_path,
                      params: request.filtered_parameters,
-                     response_code: status
+                     response_status_code: status
       end
     end
   end

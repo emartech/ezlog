@@ -24,7 +24,7 @@ RSpec.describe Ezlog::Rails::AccessLog do
                              method: 'GET',
                              path: '/healthcheck?test=true',
                              params: {test: 'true'},
-                             response_code: 200
+                             response_status_code: 200
     end
 
     it 'logs the request duration' do
