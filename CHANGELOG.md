@@ -9,8 +9,11 @@
   * Non-verbose logging of uncaught exceptions in Rails apps
     * 1 message per error
     * Use ERROR level instead of FATAL
-  * Turned off [Rack::Timeout](https://github.com/heroku/rack-timeout) logging completely, because Timeout errors are
-    handled by the error logger and we don't want duplicated log messages 
+  * [Rack::Timeout](https://github.com/heroku/rack-timeout) logging is now completely turned off, because Timeout errors 
+    are handled by the application's error logger and we don't want duplicated log messages 
+
+* Bug fixes
+  * Fix bug where the application log level wasn't set to INFO by default but remained on DEBUG
 
 ### 0.2.2 (2019-05-19)
 

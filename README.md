@@ -37,6 +37,7 @@ That's it. Everything else is automatically configured.
 * Configures Rails logging
 * Configures Sidekiq logging
 * Configures Rack::Timeout logging
+* Provides testing support for [RSpec](https://rspec.info/)
 
 #### Initializes the Logging library
 
@@ -76,7 +77,8 @@ of `Application`, behaving as described above. The logger uses the log level set
 uses INFO as a default log level.
 
 In addition to this, Ezlog also does the following:
-* It adds the environment (`Rails.env`) to the logger's initial context, so it will automatically be appended to all log messages emitted by the application.
+* It adds the environment (`Rails.env`) to the logger's initial context, so it will automatically be appended to all log messages 
+  emitted by the application.
 * It disables Rails's default (verbose) logging of uncaught errors and injects its own error logger into the application, which
   * logs 1 line per error, including the error's name and context (stack trace, etc.),
   * logs every error at ERROR level instead of the default FATAL.
@@ -84,6 +86,27 @@ In addition to this, Ezlog also does the following:
   and replaces the default Rack access log with its own access log middleware. The end result is an access log, which
   * contains all relevant information (request ID, method, path, params, client IP, duration and response status code), and
   * has 1 log line per request, logged at the end of the request.
+
+Thanks to Mathias Meyer for writing [Lograge](https://github.com/roidrage/lograge), which inspired the solution. 
+If Ezlog's not your cup of tea but you're looking for a way to tame Rails's logging then be sure to check out
+[Lograge](https://github.com/roidrage/lograge). 
+
+```
+GET /welcome?subsession_id=34ea8596f9764f475f81158667bc2654
+
+With default Rails logging:
+
+Started GET "/welcome?subsession_id=34ea8596f9764f475f81158667bc2654" for 127.0.0.1 at 2019-06-08 08:49:31 +0200
+Processing by PagesController#welcome as HTML
+  Parameters: {"subsession_id"=>"34ea8596f9764f475f81158667bc2654"}
+  Rendering pages/welcome.html.haml within layouts/application
+  Rendered pages/welcome.html.haml within layouts/application (5.5ms)
+Completed 200 OK in 31ms (Views: 27.3ms | ActiveRecord: 0.0ms)
+
+With Ezlog:
+
+{"logger":"AccessLog","timestamp":"2019-06-08T08:49:31+02:00","level":"INFO","hostname":"MacbookPro.local","pid":75463,"environment":"development","request_id":"9a43631b-284c-4677-9d08-9c1cc5c7d3a7","duration_sec":0.031,"message":"GET /welcome?subsession_id=34ea8596f9764f475f81158667bc2654 - 200 (OK)","remote_ip":"127.0.0.1","method":"GET","path":"/welcome?subsession_id=34ea8596f9764f475f81158667bc2654","params":{"subsession_id":"34ea8596f9764f475f81158667bc2654","controller":"pages","action":"welcome"},"response_status_code":200}
+```
 
 #### Configures Sidekiq logging
 
@@ -115,8 +138,38 @@ TestWorker.perform_async 42
 #### Configures Rack::Timeout logging
 
 [Rack::Timeout](https://github.com/heroku/rack-timeout) is a very useful tool for people running services on Heroku
-but it is way too verbose by default. What Ezlog does is simply reconfigure its logging to use Ezlog's logging
-mechanism and to only output messages at or above WARN level. 
+but it is way too verbose by default and all of its important messages (i.e. Timeout errors) are logged by the application
+as well. For this reason, Ezlog turns off [Rack::Timeout](https://github.com/heroku/rack-timeout) logging completely. 
+
+#### Provides testing support for RSpec
+
+Ezlog comes with built-in support for testing your logging activity using [RSpec](https://rspec.info/).
+To enable spec support for Ezlog, put this line in your `spec_helper.rb` or `rails_helper.rb`:
+```ruby
+require "ezlog/rspec"
+```
+
+What you get:
+* Helpers
+  * `log_output` provides access to the complete log output in your specs
+  * `log_output_is_expected` shorthand for writing expectations for the log output
+* Matchers
+  * `include_log_message` matcher for expecting a certain message in the log output
+  * `log` matcher for expecting an operation to log a certain message
+
+```ruby
+# Check that the log contains a certain message
+expect(log_output).to include_log_message message: 'Test message'
+log_output_is_expected.to include_log_message message: 'Test message'
+
+# Check that the message is not present in the logs before the operation but is present after it 
+expect { operation }.to log message: 'Test message', 
+                            user_id: 123456 
+
+# Expect a certain log level
+log_output_is_expected.to include_log_message(message: 'Test message').at_level(:info)
+expect { operation }.to log(message: 'Test message').at_level(:info)
+```
 
 ## Disclaimer
 
