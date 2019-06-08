@@ -15,7 +15,7 @@ RSpec.describe Ezlog::Rails::AccessLog do
 
   describe '#call' do
     it 'logs the request path and result as a message' do
-      expect { call }.to log message: 'GET /healthcheck?test=true -> 200 (OK)'
+      expect { call }.to log message: 'GET /healthcheck?test=true - 200 (OK)'
     end
 
     it 'logs additional information about the request' do
@@ -39,7 +39,7 @@ RSpec.describe Ezlog::Rails::AccessLog do
       end
 
       it 'logs the request path with sensitive information filtered out' do
-        expect { call }.to log message: 'GET /healthcheck?password=[FILTERED] -> 200 (OK)'
+        expect { call }.to log message: 'GET /healthcheck?password=[FILTERED] - 200 (OK)'
       end
 
       it 'logs the request params with sensitive information filtered out' do

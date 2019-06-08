@@ -25,7 +25,7 @@ module Ezlog
       end
 
       def log_request(request, status)
-        @logger.info message: '%s %s -> %i (%s)' % [request.method, request.filtered_path, status, Rack::Utils::HTTP_STATUS_CODES[status]],
+        @logger.info message: '%s %s - %i (%s)' % [request.method, request.filtered_path, status, Rack::Utils::HTTP_STATUS_CODES[status]],
                      remote_ip: request.remote_ip,
                      method: request.method,
                      path: request.filtered_path,
