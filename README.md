@@ -3,24 +3,33 @@
 [![Gem Version](https://badge.fury.io/rb/ezlog.svg)](https://badge.fury.io/rb/ezlog)
 [![Build Status](https://travis-ci.com/emartech/ezlog.svg?branch=master)](https://travis-ci.com/emartech/ezlog)
 
-Ezlog is intended to be a zero-configuration logging setup for pure Ruby or Rails projects using 
-[Sidekiq](https://github.com/mperham/sidekiq), [Rack::Timeout](https://github.com/heroku/rack-timeout),
-[Sequel](https://sequel.jeremyevans.net/), etc. It uses Tim Pease's wonderful [Logging](https://github.com/TwP/logging)
-gem for an all-purpose logging solution.
+Ezlog is intended to be a zero-configuration structured logging setup for pure Ruby or [Ruby on Rails](https://rubyonrails.org/) 
+projects using any (or all) of the following libraries or frameworks:
+
+* [Ruby on Rails](https://rubyonrails.org/)
+* [Sidekiq](https://github.com/mperham/sidekiq)
+* [Sequel](https://sequel.jeremyevans.net/) 
+* [Rack::Timeout](https://github.com/heroku/rack-timeout)
+
+It uses Tim Pease's wonderful [Logging](https://github.com/TwP/logging) gem for an all-purpose structured logging solution.
 
 Ezlog's purpose is threefold:
-1. Make sure that our applications are logging in a sensible manner; emitting no unnecessary "noise" but containing all 
-relevant and necessary information (like timing).
+1. Make sure that our applications are logging in a concise and sensible manner; emitting no unnecessary "noise" but 
+   containing all relevant and necessary information (like timing).
 2. Make sure that all log messages are written to STDOUT in a machine-processable format (JSON) across all of our projects.
-3. Achieving the above goal should require no configuration in the projects where the library is used.
+3. Achieving the above goals should require no configuration in the projects where the library is used.
 
 ## Installation
+
+#### Rails
 
 Add this line to your application's Gemfile:
 
 ```ruby
 gem 'ezlog'
 ```
+
+That's it. Everything else is automatically configured.
 
 ## What it does
 
@@ -68,13 +77,13 @@ uses INFO as a default log level.
 
 In addition to this, Ezlog also does the following:
 * It adds the environment (`Rails.env`) to the logger's initial context, so it will automatically be appended to all log messages emitted by the application.
-* It disables Rails's default (verbose) uncaught error logging and injects its own error logger into the application, which
+* It disables Rails's default (verbose) logging of uncaught errors and injects its own error logger into the application, which
   * logs 1 line per error, including the error's name and context (stack trace, etc.),
   * logs every error at ERROR level instead of the default FATAL.
 * It disables Rails's default (verbose) request logging, which logs several lines per event during the processing of an action
   and replaces the default Rack access log with its own access log middleware. The end result is an access log, which
-  * has 1 log line per request, logged at the end of the request,
-  * contains all relevant information (request ID, method, path, params, client IP, response code and duration).
+  * contains all relevant information (request ID, method, path, params, client IP, duration and response status code), and
+  * has 1 log line per request, logged at the end of the request.
 
 #### Configures Sidekiq logging
 
