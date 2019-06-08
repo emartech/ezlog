@@ -14,18 +14,20 @@ module Ezlog
       disable_rack_timeout_logging if defined? ::Rack::Timeout
     end
 
-    config.before_configuration do |app|
-      rails_logger = Ezlog.logger('Application')
-      app.config.logger = rails_logger
+    initializer 'ezlog.configure_middlewares' do |app|
       app.config.middleware.insert_after ::ActionDispatch::RequestId, Ezlog::Rails::RequestLogContext
       app.config.middleware.swap ::Rails::Rack::Logger, Ezlog::Rails::AccessLog, Ezlog.logger('AccessLog')
       app.config.middleware.swap ::ActionDispatch::DebugExceptions, Ezlog::Rails::DebugExceptions
-      app.config.middleware.insert_after Ezlog::Rails::DebugExceptions, Ezlog::Rails::LogExceptions, rails_logger
+      app.config.middleware.insert_after Ezlog::Rails::DebugExceptions, Ezlog::Rails::LogExceptions, Ezlog.logger('Application')
     end
 
     config.after_initialize do
       Ezlog::Rails::LogSubscriber.detach ::ActionController::LogSubscriber
       Ezlog::Rails::LogSubscriber.detach ::ActionView::LogSubscriber
+    end
+
+    config.before_configuration do |app|
+      app.config.logger = Ezlog.logger('Application')
     end
 
     private
