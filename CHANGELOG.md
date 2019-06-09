@@ -1,6 +1,6 @@
-### 0.3.0 (in development)
+### 0.3.1 (2019-06-09)
 
-[Full Changelog](https://github.com/emartech/ezlog/compare/v0.2.2...v0.3.0)
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.2.2...v0.3.1)
 
 * Features & enhancements
   * Unified access log for Rails
