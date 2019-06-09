@@ -1,5 +1,5 @@
 require 'time'
-require 'multi_json'
+require 'json'
 
 module Ezlog
   class LoggingLayout < ::Logging::Layout
@@ -12,7 +12,7 @@ module Ezlog
       add_initial_context_to log_entry
       add_logging_context_to log_entry
       add_event_information_to log_entry, event
-      ::MultiJson.dump(log_entry) + "\n"
+      ::JSON.dump(log_entry) + "\n"
     end
 
     private
