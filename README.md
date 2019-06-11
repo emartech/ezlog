@@ -34,9 +34,9 @@ That's it. Everything else is automatically configured.
 ## What it does
 
 * Initializes the [Logging](https://github.com/TwP/logging) library
-* Configures Rails logging
-* Configures Sidekiq logging
-* Configures Rack::Timeout logging
+* Configures [Rails](https://rubyonrails.org/)'s logging
+* Configures [Sidekiq](https://github.com/mperham/sidekiq) logging
+* Configures [Rack::Timeout](https://github.com/heroku/rack-timeout) logging
 * Provides testing support for [RSpec](https://rspec.info/)
 
 #### Initializes the Logging library
@@ -67,23 +67,23 @@ logger.info message: 'Job finished', duration: 2
 #=> {"logger":"App","timestamp":"2019-05-11T16:08:38+02:00","level":"INFO","hostname":"MacbookPro.local","pid":71674,"message":"Job finished","duration":2}
 
 logger.error ex
-#=> {"logger":"App","timestamp":"2019-05-11T16:08:38+02:00","level":"INFO","hostname":"MacbookPro.local","pid":71674,"message":"Error message","error":{"class":"StandardError","message":"Error message","backtrace":[...]}}
+#=> {"logger":"App","timestamp":"2019-05-11T16:08:38+02:00","level":"ERROR","hostname":"MacbookPro.local","pid":71674,"message":"Error message","error":{"class":"StandardError","message":"Error message","backtrace":[...]}}
 ```
 
 #### Configures Rails logging
 
 Ezlog configures the `Rails.logger` to be an instance of a [Logging](https://github.com/TwP/logging) logger by the name 
-of `Application`, behaving as described above. The logger uses the log level set in `application.rb` (if present) or 
-uses INFO as a default log level.
+of `Application`, behaving as described above. The logger uses the log level set in `application.rb` if present, or 
+INFO as a default log level.
 
 In addition to this, Ezlog also does the following:
 * It adds the environment (`Rails.env`) to the logger's initial context, so it will automatically be appended to all log messages 
   emitted by the application.
-* It disables Rails's default (verbose) logging of uncaught errors and injects its own error logger into the application, which
+* It disables Rails's default logging of uncaught errors and injects its own error logger into the application, which
   * logs 1 line per error, including the error's name and context (stack trace, etc.),
   * logs every error at ERROR level instead of the default FATAL.
-* It disables Rails's default (verbose) request logging, which logs several lines per event during the processing of an action
-  and replaces the default Rack access log with its own access log middleware. The end result is an access log, which
+* It disables Rails's default request logging, which logs several lines per event during the processing of an action,
+  and replaces the default Rack access log with its own access log middleware. The end result is an access log that
   * contains all relevant information (request ID, method, path, params, client IP, duration and response status code), and
   * has 1 log line per request, logged at the end of the request.
 
@@ -123,6 +123,8 @@ during the execution of the job will contain this information as well.
 
 ```ruby
 class TestWorker
+  include Sidekiq::Worker
+
   def perform(customer_id)
     logger.warn 'Customer not found'
   end
@@ -145,6 +147,7 @@ as well. For this reason, Ezlog turns off [Rack::Timeout](https://github.com/her
 
 Ezlog comes with built-in support for testing your logging activity using [RSpec](https://rspec.info/).
 To enable spec support for Ezlog, put this line in your `spec_helper.rb` or `rails_helper.rb`:
+
 ```ruby
 require "ezlog/rspec"
 ```
