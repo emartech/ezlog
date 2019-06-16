@@ -1,3 +1,11 @@
+### master (in development)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.3.1...master)
+
+* Bug fixes
+  * Default log level is now set for the root logger instead of the root log layout so that the log level can be 
+    overriden programatically per logger (if necessary) 
+
 ### 0.3.1 (2019-06-09)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.2.2...v0.3.1)
