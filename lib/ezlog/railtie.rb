@@ -1,9 +1,8 @@
 module Ezlog
   class Railtie < Rails::Railtie
     initializer 'ezlog.configure_logging' do |app|
-      ::Logging.logger.root.appenders = ::Logging.appenders.stdout 'stdout',
-                                                                   layout: Ezlog::LoggingLayout.new(environment: ::Rails.env),
-                                                                   level: app.config.log_level
+      ::Logging.logger.root.appenders = ::Logging.appenders.stdout 'stdout', layout: Ezlog::LoggingLayout.new(environment: ::Rails.env)
+      ::Logging.logger.root.level = app.config.log_level
     end
 
     initializer 'ezlog.configure_sidekiq_logging' do
