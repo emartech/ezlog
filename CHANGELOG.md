@@ -11,10 +11,10 @@
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.2.2...v0.3.1)
 
 * Features & enhancements
-  * Unified access log for Rails
+  * Unified access log for [Rails](https://rubyonrails.org/)
     * 1 message per request
     * Includes request ID, parameters, response code
-  * Non-verbose logging of uncaught exceptions in Rails apps
+  * Non-verbose logging of uncaught exceptions in [Rails](https://rubyonrails.org/) apps
     * 1 message per error
     * Use ERROR level instead of FATAL
   * [Rack::Timeout](https://github.com/heroku/rack-timeout) logging is now completely turned off, because Timeout errors 
@@ -52,4 +52,4 @@ First version of the gem including the following:
   * JobLogger for [Sidekiq](https://github.com/mperham/sidekiq)
   * Filter [Rack::Timeout](https://github.com/heroku/rack-timeout) logs to WARN level and above
   * [RSpec](https://rspec.info/) support
-  * Rails integration via Railtie
+  * [Rails](https://rubyonrails.org/) integration via Railtie
