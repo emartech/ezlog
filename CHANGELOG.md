@@ -1,6 +1,9 @@
-### master (in development)
+### 0.3.2 (2019-06-18)
 
-[Full Changelog](https://github.com/emartech/ezlog/compare/v0.3.1...master)
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.3.1...v0.3.2)
+
+* Features & enhancements
+  * Ruby 2.4 is supported
 
 * Bug fixes
   * Default log level is now set for the root logger instead of the root log layout so that the log level can be 

@@ -7,12 +7,14 @@ module Ezlog
 
       def call(job_hash, _queue)
         within_log_context(JobContext.from_job_hash(job_hash)) do
-          logger.info "#{job_hash['class']} started"
-          benchmark { yield }
-          logger.info message: "#{job_hash['class']} finished"
-        rescue Exception
-          logger.info message: "#{job_hash['class']} failed"
-          raise
+          begin
+            logger.info "#{job_hash['class']} started"
+            benchmark { yield }
+            logger.info message: "#{job_hash['class']} finished"
+          rescue Exception
+            logger.info message: "#{job_hash['class']} failed"
+            raise
+          end
         end
       end
 
