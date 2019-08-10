@@ -73,8 +73,8 @@ logger.error ex
 #### Configures Rails logging
 
 Ezlog configures the `Rails.logger` to be an instance of a [Logging](https://github.com/TwP/logging) logger by the name 
-of `Application`, behaving as described above. The logger uses the log level set in `application.rb` if present, or 
-INFO as a default log level.
+of `Application`, behaving as described above. The logger uses the log level set in the application's configuration 
+if present, or INFO as the default log level.
 
 In addition to this, Ezlog also does the following:
 * It adds the environment (`Rails.env`) to the logger's initial context, so it will automatically be appended to all log messages 
@@ -111,7 +111,8 @@ With Ezlog:
 #### Configures Sidekiq logging
 
 Ezlog configures the `Sidekiq.logger` to be an instance of a [Logging](https://github.com/TwP/logging) logger by the name
-of `Sidekiq`, behaving as described above. It also comes with its own job logger for [Sidekiq](https://github.com/mperham/sidekiq) 
+of `Sidekiq`, behaving as described above. The logger uses the log level set in the application's configuration if present, 
+or INFO as the default log level. Ezlog also comes with its own job logger for [Sidekiq](https://github.com/mperham/sidekiq) 
 which does several things that come in very handy when working with background jobs.
  
 * It emits two log messages per job run; one when the job is started and another one when the job is finished (successfully or unsuccessfuly).

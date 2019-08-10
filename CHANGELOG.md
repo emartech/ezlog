@@ -1,3 +1,11 @@
+### (in development)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.3.2...master)
+
+* Features & enhancements
+  * [Sidekiq](https://github.com/mperham/sidekiq) logging respects the log level configured for the application.  
+
+
 ### 0.3.2 (2019-06-18)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.3.1...v0.3.2)

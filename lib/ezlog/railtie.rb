@@ -5,8 +5,8 @@ module Ezlog
       ::Logging.logger.root.level = app.config.log_level
     end
 
-    initializer 'ezlog.configure_sidekiq_logging' do
-      initialize_sidekiq_logging if defined? ::Sidekiq
+    initializer 'ezlog.configure_sidekiq_logging' do |app|
+      initialize_sidekiq_logging(app) if defined? ::Sidekiq
     end
 
     initializer 'ezlog.configure_rack_timeout_logging' do
@@ -32,9 +32,9 @@ module Ezlog
 
     private
 
-    def initialize_sidekiq_logging
+    def initialize_sidekiq_logging(app)
       ::Sidekiq.logger = Ezlog.logger('Sidekiq')
-      ::Sidekiq.logger.level = :info
+      ::Sidekiq.logger.level = app.config.log_level
       ::Sidekiq.configure_server do |config|
         config.options[:job_logger] = Ezlog::Sidekiq::JobLogger
         config.error_handlers << Ezlog::Sidekiq::ErrorLogger.new
