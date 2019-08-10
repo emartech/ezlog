@@ -3,8 +3,8 @@
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.3.2...master)
 
 * Features & enhancements
-  * [Sidekiq](https://github.com/mperham/sidekiq) logging respects the log level configured for the application.  
-
+  * [Sidekiq](https://github.com/mperham/sidekiq) logging respects the log level configured for the application.
+  * Log level can be set from an environment variable (LOG_LEVEL).
 
 ### 0.3.2 (2019-06-18)
 

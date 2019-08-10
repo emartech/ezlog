@@ -27,7 +27,7 @@ module Ezlog
 
     config.before_configuration do |app|
       app.config.logger = Ezlog.logger('Application')
-      app.config.log_level = :info
+      app.config.log_level = ENV['LOG_LEVEL'] || :info
     end
 
     private
