@@ -1,3 +1,12 @@
+### 0.3.5 (2019-08-14)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.3.4...v0.3.5)
+
+* Bug fixes
+  * Requiring `ezlog/rspec` in the `spec_helper` correctly captures log messages produced during tests. Requiring
+    `ezlog` (as was done in the previous version) fails to capture logs because it loads the gem before `Rails` is 
+    defined so the Railtie doesn't get executed.
+
 ### 0.3.4 (2019-08-14)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.3.3...v0.3.4)
