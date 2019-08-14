@@ -1,3 +1,4 @@
+require 'ezlog'
 require 'rspec/logging_helper'
 require_relative 'rspec/helpers'
 require_relative 'rspec/matchers'
