@@ -1,3 +1,13 @@
+### 0.3.4 (2019-08-14)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.3.3...v0.3.4)
+
+* Bug fixes
+  * Ezlog is required when requiring `ezlog/rspec`. This way all dependencies are in place even if `Bundler.require` 
+    wasn't called.
+  * Access log now correctly logs requests that fail with an uncaught error. Previously these requests were logged
+    with a path of `/500`.
+
 ### 0.3.3 (2019-08-10)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.3.2...v0.3.3)
