@@ -12,6 +12,9 @@ module Ezlog
         status, headers, body_lines = benchmark { @app.call(env) }
         log_request ActionDispatch::Request.new(env), status
         [status, headers, body_lines]
+      rescue Exception => ex
+        log_request ActionDispatch::Request.new(env), ActionDispatch::ExceptionWrapper.status_code_for_exception(ex.class.name)
+        raise
       end
 
       private

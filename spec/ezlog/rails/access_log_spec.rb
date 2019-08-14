@@ -46,5 +46,14 @@ RSpec.describe Ezlog::Rails::AccessLog do
         expect { call }.to log params: {password: '[FILTERED]'}
       end
     end
+
+    context 'when the request raises an exception' do
+      let(:app_call) { -> { raise Exception, 'test error' } }
+
+      it 'logs the request and reraises the error' do
+        expect { call }.to raise_error(Exception, 'test error')
+                             .and log(message: 'GET /healthcheck?test=true - 500 (Internal Server Error)')
+      end
+    end
   end
 end
