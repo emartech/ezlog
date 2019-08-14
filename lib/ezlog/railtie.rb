@@ -15,8 +15,9 @@ module Ezlog
 
     initializer 'ezlog.configure_middlewares' do |app|
       app.config.middleware.insert_after ::ActionDispatch::RequestId, Ezlog::Rails::RequestLogContext
-      app.config.middleware.swap ::Rails::Rack::Logger, Ezlog::Rails::AccessLog, Ezlog.logger('AccessLog')
+      app.config.middleware.delete ::Rails::Rack::Logger
       app.config.middleware.swap ::ActionDispatch::DebugExceptions, Ezlog::Rails::DebugExceptions
+      app.config.middleware.insert_before Ezlog::Rails::DebugExceptions, Ezlog::Rails::AccessLog, Ezlog.logger('AccessLog')
       app.config.middleware.insert_after Ezlog::Rails::DebugExceptions, Ezlog::Rails::LogExceptions, Ezlog.logger('Application')
     end
 
