@@ -1,7 +1,8 @@
-require 'ezlog'
+require 'logging'
 require 'rspec/logging_helper'
 require_relative 'rspec/helpers'
 require_relative 'rspec/matchers'
+require_relative 'logging_layout'
 
 RSpec.configure do |config|
   config.include Ezlog::RSpec::Helpers
