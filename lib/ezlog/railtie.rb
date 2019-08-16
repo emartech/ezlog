@@ -1,5 +1,9 @@
 module Ezlog
   class Railtie < Rails::Railtie
+    initializer "ezlog.initialize" do
+      require "ezlog/rails/extensions"
+    end
+
     initializer 'ezlog.configure_logging' do |app|
       ::Logging.logger.root.appenders = ::Logging.appenders.stdout 'stdout', layout: Ezlog::LoggingLayout.new(environment: ::Rails.env)
       ::Logging.logger.root.level = app.config.log_level
@@ -16,9 +20,8 @@ module Ezlog
     initializer 'ezlog.configure_middlewares' do |app|
       app.config.middleware.insert_after ::ActionDispatch::RequestId, Ezlog::Rails::RequestLogContext
       app.config.middleware.delete ::Rails::Rack::Logger
-      app.config.middleware.swap ::ActionDispatch::DebugExceptions, Ezlog::Rails::DebugExceptions
-      app.config.middleware.insert_before Ezlog::Rails::DebugExceptions, Ezlog::Rails::AccessLog, Ezlog.logger('AccessLog')
-      app.config.middleware.insert_after Ezlog::Rails::DebugExceptions, Ezlog::Rails::LogExceptions, Ezlog.logger('Application')
+      app.config.middleware.insert_before ::ActionDispatch::DebugExceptions, Ezlog::Rails::AccessLog, Ezlog.logger('AccessLog')
+      app.config.middleware.insert_after ::ActionDispatch::DebugExceptions, Ezlog::Rails::LogExceptions, Ezlog.logger('Application')
     end
 
     config.after_initialize do
