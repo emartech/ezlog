@@ -1,3 +1,11 @@
+### (in development)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.3.5...master)
+
+* Bug fixes
+  * ActionDispatch::DebugExceptions is no longer replaced because other gems 
+    (like [web-console](https://github.com/rails/web-console)) are depending on it.
+
 ### 0.3.5 (2019-08-14)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.3.4...v0.3.5)
