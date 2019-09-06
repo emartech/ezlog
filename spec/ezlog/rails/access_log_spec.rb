@@ -14,6 +14,8 @@ RSpec.describe Ezlog::Rails::AccessLog do
   end
 
   describe '#call' do
+    after { Logging.mdc.clear }
+
     it 'logs the request path and result as a message' do
       expect { call }.to log message: 'GET /healthcheck?test=true - 200 (OK)'
     end
