@@ -1,6 +1,6 @@
-### 0.4.0 (in development)
+### 0.4.0 (2019-09-06)
 
-[Full Changelog](https://github.com/emartech/ezlog/compare/v0.3.5...master)
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.3.5...v0.4.0)
 
 * Features & enhancements
   * Added log context management methods `within_log_context` and `add_to_log_context` to Ezlog module.
