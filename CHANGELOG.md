@@ -1,7 +1,12 @@
-### (in development)
+### 0.4.0 (in development)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.3.5...master)
 
+* Features & enhancements
+  * Added log context management methods `within_log_context` and `add_to_log_context` to Ezlog module.
+  * Replaced ActiveRecord query logging with a log subscriber that logs queries via Ezlog.
+  * Added automatic query logging (at DEBUG level) to Sequel connections.
+  
 * Bug fixes
   * ActionDispatch::DebugExceptions is no longer replaced because other gems 
     (like [web-console](https://github.com/rails/web-console)) are depending on it.
