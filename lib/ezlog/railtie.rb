@@ -9,15 +9,19 @@ module Ezlog
       ::Logging.logger.root.level = app.config.log_level
     end
 
-    initializer 'ezlog.configure_sidekiq_logging' do |app|
+    initializer 'ezlog.configure_sidekiq' do |app|
       initialize_sidekiq_logging(app) if defined? ::Sidekiq
     end
 
-    initializer 'ezlog.configure_rack_timeout_logging' do
+    initializer 'ezlog.configure_sequel' do
+      ::Sequel::Database.extension :ezlog_logging if defined? ::Sequel
+    end
+
+    initializer 'ezlog.configure_rack_timeout' do
       disable_rack_timeout_logging if defined? ::Rack::Timeout
     end
 
-    initializer 'ezlog.configure_middlewares' do |app|
+    initializer 'ezlog.configure_rails_middlewares' do |app|
       app.config.middleware.insert_after ::ActionDispatch::RequestId, Ezlog::Rails::RequestLogContext
       app.config.middleware.delete ::Rails::Rack::Logger
       app.config.middleware.insert_before ::ActionDispatch::DebugExceptions, Ezlog::Rails::AccessLog, Ezlog.logger('AccessLog')

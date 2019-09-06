@@ -28,6 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "sidekiq", "~> 5.0"
+  spec.add_development_dependency "sequel", "~> 5.0"
   spec.add_development_dependency "actionpack", "~> 5.0"
   spec.add_development_dependency "activerecord", "~> 5.0"
 end
