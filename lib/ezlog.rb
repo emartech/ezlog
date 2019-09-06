@@ -12,4 +12,6 @@ module Ezlog
   def self.logger(name)
     ::Logging::Logger[name]
   end
+
+  extend LogContextHelper
 end
