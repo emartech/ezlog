@@ -12,7 +12,7 @@ module Ezlog
           {
             jid: job['jid'],
             queue: job['queue'],
-            worker: job['class'],
+            worker: job_class(job),
             created_at: job['created_at'],
             enqueued_at: job['enqueued_at'],
             run_count: (job['retry_count'] || -1) + 2
@@ -28,7 +28,11 @@ module Ezlog
         end
 
         def method_parameters_of(job)
-          Kernel.const_get(job['class'].to_sym).instance_method(:perform).parameters
+          Kernel.const_get(job_class(job).to_sym).instance_method(:perform).parameters
+        end
+
+        def job_class(job)
+          job['wrapped'] || job['class']
         end
       end
     end

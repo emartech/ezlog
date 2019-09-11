@@ -14,13 +14,13 @@ RSpec.describe Ezlog::Sidekiq::JobContext do
     let(:now) { Time.now }
 
     it 'contains all relevant information about the job, including its parameters by name' do
-      expect(job_message).to include(jid: 'job ID',
+      expect(job_message).to include jid: 'job ID',
                                      queue: 'job queue',
                                      worker: 'TestWorker',
                                      customer_id: 1,
                                      name: 'name param',
                                      created_at: now,
-                                     enqueued_at: now)
+                                     enqueued_at: now
     end
 
     it 'contains the number of times this job has run (including the current execution)' do
@@ -30,7 +30,18 @@ RSpec.describe Ezlog::Sidekiq::JobContext do
     context 'when the job has already been run before' do
       before { job_hash['retry_count'] = 0 }
 
-      it { is_expected.to include run_count: 2}
+      it { is_expected.to include run_count: 2 }
+    end
+
+    context 'when the job was wrapped in an ActiveJob' do
+      before do
+        job_hash.merge! 'class' => 'ActiveJob',
+                        'wrapped' => 'TestWorker'
+      end
+
+      it 'contains the wrapped job class' do
+        expect(job_message).to include worker: 'TestWorker'
+      end
     end
   end
 end
