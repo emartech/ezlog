@@ -2,10 +2,9 @@ RSpec.describe Ezlog::Sidekiq::JobLogger do
   include_context 'Sidekiq'
 
   let(:job_logger) { Ezlog::Sidekiq::JobLogger.new }
+  let(:job_hash) { sidekiq_job_hash jid: 'job ID' }
 
   describe '#call' do
-    let(:job_hash) { sidekiq_job_hash jid: 'job ID' }
-
     it 'yields the block it was called with' do
       expect { |block| job_logger.call(job_hash, :queue, &block) }.to yield_control
     end
@@ -52,6 +51,12 @@ RSpec.describe Ezlog::Sidekiq::JobLogger do
                                                                          jid: 'job ID',
                                                                          duration_sec: 1.0).at_level(:info)
       end
+    end
+  end
+
+  describe '#with_job_hash_context' do
+    it 'yields the block that was passed - for compatibility with Sidekiq 6' do
+      expect { |block| job_logger.with_job_hash_context job_hash, &block }.to yield_control
     end
   end
 end

@@ -18,6 +18,10 @@ module Ezlog
         end
       end
 
+      def with_job_hash_context(_job_hash, &_block)
+        yield
+      end
+
       private
 
       def benchmark
