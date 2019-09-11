@@ -1,3 +1,13 @@
+### 0.5.0 (2019-09-11)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.4.0...v0.5.0)
+
+* Features & enhancements
+  * Support [Sidekiq 6](https://github.com/mperham/sidekiq) logging
+  * Log the underlying (real) job class when using [Sidekiq](https://github.com/mperham/sidekiq) wrapped into
+    [Active Job](https://github.com/rails/rails/tree/master/activejob)
+
+
 ### 0.4.0 (2019-09-06)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.3.5...v0.4.0)
