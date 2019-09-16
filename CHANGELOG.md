@@ -1,3 +1,11 @@
+### 0.5.1 (2019-09-16)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.5.0...v0.5.1)
+
+* Bug fixes
+  * Projects that don't use ActiveRecord can still use Ezlog. The previous version tried to replace ActiveRecord's
+    log subscriber even when ActiveRecord wasn't used and thus halted the initialization process.
+
 ### 0.5.0 (2019-09-11)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.4.0...v0.5.0)
