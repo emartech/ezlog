@@ -45,7 +45,7 @@ module Ezlog
     private
 
     def initialize_sidekiq_logging(app)
-      ::Sidekiq.logger = Ezlog.logger('Sidekiq')
+      ::Sidekiq.logger = Ezlog.logger('Sidekiq').extend Ezlog::Sidekiq::LoggerExtension
       ::Sidekiq.logger.level = app.config.log_level
       ::Sidekiq.configure_server do |config|
         config.options[:job_logger] = Ezlog::Sidekiq::JobLogger
