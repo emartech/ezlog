@@ -182,7 +182,7 @@ Ezlog provides two helper methods which can be used to add context information t
   end
   Rails.logger.info 'test 2'
   
-  #=> {...,"level":"INFO","customer_id:1234,"message":"test 1"}
+  #=> {...,"level":"INFO","customer_id":1234,"message":"test 1"}
   #=> {...,"level":"INFO","message":"test 2"}
   ```
   
