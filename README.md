@@ -21,7 +21,7 @@ Ezlog's purpose is threefold:
 
 ## Installation
 
-#### Rails
+### Rails
 
 Add this line to your application's Gemfile:
 
@@ -34,10 +34,10 @@ settings manually in the way you're used to; via [Rails](https://rubyonrails.org
 the [Rails](https://rubyonrails.org/) new project generator automatically generates code for the production environment
 configuration that overrides these settings.
 
-**For Ezlog to work properly, you also need to delete the logging configuration options in the 
-`config/environments/production.rb` generated file.**
+For Ezlog to work properly, you also need to delete the logging configuration options in the 
+`config/environments/production.rb` generated file.
 
-#### Non-Rails applications
+### Non-Rails applications
 
 At the moment Ezlog only support [Rails](https://rubyonrails.org/) apps. Non-Rails support is planned.
 
