@@ -1,3 +1,12 @@
+### 0.5.2 (2019-09-27)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.5.1...v0.5.2)
+
+* Bug fixes
+  * Sidekiq logger now supports the Sidekiq 6 logger interface which includes the method `with_context`. This is 
+    important because other gems (notably [sidekiq-unique-jobs](https://github.com/mhenrixon/sidekiq-unique-jobs))
+    depend on this method and might break if it's not present.
+
 ### 0.5.1 (2019-09-16)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.5.0...v0.5.1)
