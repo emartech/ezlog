@@ -11,7 +11,7 @@ projects using any (or all) of the following libraries or frameworks:
 * [Sequel](https://sequel.jeremyevans.net/) 
 * [Rack::Timeout](https://github.com/heroku/rack-timeout)
 
-It uses Tim Pease's wonderful [Logging](https://github.com/TwP/logging) gem for an all-purpose structured logging solution.
+It uses Tim Pease's wonderful [Logging](https://github.com/TwP/logging) gem under the hood for an all-purpose structured logging solution.
 
 Ezlog's purpose is threefold:
 1. Make sure that our applications are logging in a concise and sensible manner; emitting no unnecessary "noise" but 
@@ -29,7 +29,17 @@ Add this line to your application's Gemfile:
 gem 'ezlog'
 ```
 
-That's it. Everything else is automatically configured.
+Although Ezlog sets up sensible defaults for all logging configuration settings, it leaves you the option to override these
+settings manually in the way you're used to; via [Rails](https://rubyonrails.org/)'s configuration mechanism. Unfortunately
+the [Rails](https://rubyonrails.org/) new project generator automatically generates code for the production environment
+configuration that overrides these settings.
+
+**For Ezlog to work properly, you also need to delete the logging configuration options in the 
+`config/environments/production.rb` generated file.**
+
+#### Non-Rails applications
+
+At the moment Ezlog only support [Rails](https://rubyonrails.org/) apps. Non-Rails support is planned.
 
 ## What it does
 
