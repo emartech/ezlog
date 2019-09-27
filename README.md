@@ -47,6 +47,7 @@ At the moment Ezlog only support [Rails](https://rubyonrails.org/) apps. Non-Rai
 * Configures [Rails](https://rubyonrails.org/)'s logging
 * Configures [Sidekiq](https://github.com/mperham/sidekiq) logging
 * Configures [Rack::Timeout](https://github.com/heroku/rack-timeout) logging
+* Provides support for adding context information to log messages
 * Provides testing support for [RSpec](https://rspec.info/)
 
 ### Initializes the Logging library
@@ -161,6 +162,37 @@ TestWorker.perform_async 42
 [Rack::Timeout](https://github.com/heroku/rack-timeout) is a very useful tool for people running services on Heroku
 but it is way too verbose by default and all of its important messages (i.e. Timeout errors) are logged by the application
 as well. For this reason, Ezlog turns off [Rack::Timeout](https://github.com/heroku/rack-timeout) logging completely. 
+
+### Provides support for adding context information to log messages
+
+Ezlog provides two helper methods which can be used to add context information to log messages:
+
+* `within_log_context(context)`: Starts a new log context initialized with `context` and executes the provided block 
+  within that context. Once execution is finished, the log context is cleaned up and the previous context (if any) is
+  reinstated. In practice, this means that every time we log something (within the block), the log message will include
+  the information that's in the current context. This can be useful for storing request-specific information 
+  (request ID, user ID, ...) in the log context early on (for example in a middleware) and not have to worry about 
+  including it every time we want to log a message.
+  
+  Example:
+  
+  ```ruby
+  within_log_context customer_id: 1234 do
+    Rails.logger.info 'test 1'
+  end
+  Rails.logger.info 'test 2'
+  
+  #=> {...,"level":"INFO","customer_id:1234,"message":"test 1"}
+  #=> {...,"level":"INFO","message":"test 2"}
+  ```
+  
+* `add_to_log_context(context)`: Adds the provided `context` to the current log context but provides no mechanism for
+  removing it later. Only use this method if you are sure that you're working within a specific log context and that it
+  will be cleaned up later (e.g. by only using this method in a block passed to the previously explained 
+  `within_log_context` method).
+
+You can access these methods either in the global scope by calling them via `Ezlog.within_log_context` and 
+`Ezlog.add_to_log_context` or locally by including the `Ezlog::LogContextHelper` module into your class/module.
 
 ### Provides testing support for RSpec
 
