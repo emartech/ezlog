@@ -46,6 +46,7 @@ At the moment Ezlog only support [Rails](https://rubyonrails.org/) apps. Non-Rai
 * Initializes the [Logging](https://github.com/TwP/logging) library
 * Configures [Rails](https://rubyonrails.org/)'s logging
 * Configures [Sidekiq](https://github.com/mperham/sidekiq) logging
+* Configures [Sequel](https://sequel.jeremyevans.net/) logging
 * Configures [Rack::Timeout](https://github.com/heroku/rack-timeout) logging
 * Provides support for adding context information to log messages
 * Provides testing support for [RSpec](https://rspec.info/)
@@ -155,6 +156,18 @@ TestWorker.perform_async 42
 #=> {"logger":"Sidekiq","timestamp":"2019-05-12T10:38:10+02:00","level":"INFO","hostname":"MacbookPro.local","pid":75538,"jid":"abcdef1234567890","queue":"default","worker":"TestWorker","created_at":"2019-05-12 10:38:10 +0200","enqueued_at":"2019-05-12 10:38:10 +0200","run_count":1,"customer_id":42,"message":"TestWorker started"}
 #=> {"logger":"Sidekiq","timestamp":"2019-05-12T10:38:10+02:00","level":"WARN","hostname":"MacbookPro.local","pid":75538,"jid":"abcdef1234567890","queue":"default","worker":"TestWorker","created_at":"2019-05-12 10:38:10 +0200","enqueued_at":"2019-05-12 10:38:10 +0200","run_count":1,"customer_id":42,"message":"Customer not found"}
 #=> {"logger":"Sidekiq","timestamp":"2019-05-12T10:38:12+02:00","level":"INFO","hostname":"MacbookPro.local","pid":75538,"jid":"abcdef1234567890","queue":"default","worker":"TestWorker","created_at":"2019-05-12 10:38:10 +0200","enqueued_at":"2019-05-12 10:38:10 +0200","run_count":1,"customer_id":42,"duration_sec":2.667,"message":"TestWorker finished"}
+```
+
+### Configures Sequel logging
+
+Ezlog adds a logging extension to [Sequel](https://sequel.jeremyevans.net/) that appends a logger to any newly opened
+database connection. This logger is an instance of a [Logging](https://github.com/TwP/logging) logger by the name of
+`Sequel`, behaving as described above. It also sets [Sequel](https://sequel.jeremyevans.net/)'s `sql_log_level` to `debug`. 
+
+This extension isn't enabled by default, because [Sequel](https://sequel.jeremyevans.net/) logging isn't necessarily
+needed in every project. You can enable it by adding the following line to your application's configuration:
+```
+config.ezlog.enable_sequel_logging = true
 ```
 
 ### Configures Rack::Timeout logging
