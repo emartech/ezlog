@@ -1,5 +1,8 @@
 module Ezlog
   class Railtie < Rails::Railtie
+    config.ezlog = ActiveSupport::OrderedOptions.new
+    config.ezlog.enable_sequel_logging = false
+
     initializer "ezlog.initialize" do
       require "ezlog/rails/extensions"
     end
@@ -13,8 +16,8 @@ module Ezlog
       initialize_sidekiq_logging(app) if defined? ::Sidekiq
     end
 
-    initializer 'ezlog.configure_sequel' do
-      ::Sequel::Database.extension :ezlog_logging if defined? ::Sequel
+    initializer 'ezlog.configure_sequel' do |app|
+      ::Sequel::Database.extension :ezlog_logging if defined?(::Sequel) && app.config.ezlog.enable_sequel_logging
     end
 
     initializer 'ezlog.configure_rack_timeout' do
