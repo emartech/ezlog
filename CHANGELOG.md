@@ -1,3 +1,11 @@
+### 0.6.0 (2019-11-29)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.5.3...v0.6.0)
+
+* Features & enhancements
+  * Disabled [Sequel](https://sequel.jeremyevans.net/) logging by default. It can be enabled with the
+    `enable_sequel_logging` config switch.
+
 ### 0.5.3 (2019-10-29)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.5.2...v0.5.3)
@@ -40,7 +48,7 @@
 * Features & enhancements
   * Added log context management methods `within_log_context` and `add_to_log_context` to Ezlog module.
   * Replaced ActiveRecord query logging with a log subscriber that logs queries via Ezlog.
-  * Added automatic query logging (at DEBUG level) to Sequel connections.
+  * Added automatic query logging (at DEBUG level) to [Sequel](https://sequel.jeremyevans.net/) connections.
   
 * Bug fixes
   * ActionDispatch::DebugExceptions is no longer replaced because other gems 
