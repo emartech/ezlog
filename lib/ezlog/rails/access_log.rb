@@ -29,13 +29,16 @@ module Ezlog
       end
 
       def log_request(request, status)
-        @logger.info message: '%s %s - %i (%s)' % [request.method, request.filtered_path, status, Rack::Utils::HTTP_STATUS_CODES[status]],
-                     remote_ip: request.remote_ip,
-                     method: request.method,
-                     path: request.filtered_path,
-                     params: params_to_log_in(request),
-                     params_serialized: request.filtered_parameters.inspect,
-                     response_status_code: status
+        message = {
+          message: '%s %s - %i (%s)' % [request.method, request.filtered_path, status, Rack::Utils::HTTP_STATUS_CODES[status]],
+          remote_ip: request.remote_ip,
+          method: request.method,
+          path: request.filtered_path,
+          params: params_to_log_in(request),
+          response_status_code: status
+        }
+        message.merge! params_serialized: request.filtered_parameters.inspect if @whitelisted_params
+        @logger.info message
       end
 
       def params_to_log_in(request)

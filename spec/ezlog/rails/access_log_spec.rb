@@ -44,7 +44,7 @@ RSpec.describe Ezlog::Rails::AccessLog do
       end
 
       it 'logs all parameters serialized' do
-        expect { call }.to log params_serialized: '{\"allowed\"=>\"1\", \"not_allowed\"=>\"2\"}'
+        expect { call }.to log params_serialized: '{"allowed"=>"1", "not_allowed"=>"2"}'
       end
     end
 
@@ -54,6 +54,10 @@ RSpec.describe Ezlog::Rails::AccessLog do
 
       it 'logs all params' do
         expect { call }.to log params: {allowed: '1', not_allowed: '2'}
+      end
+
+      it 'does not log serialized params' do
+        expect { call }.not_to log params_serialized: '{"allowed"=>"1", "not_allowed"=>"2"}'
       end
     end
 
