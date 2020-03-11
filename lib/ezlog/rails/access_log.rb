@@ -34,6 +34,7 @@ module Ezlog
                      method: request.method,
                      path: request.filtered_path,
                      params: params_to_log_in(request),
+                     params_serialized: request.filtered_parameters.inspect,
                      response_status_code: status
       end
 

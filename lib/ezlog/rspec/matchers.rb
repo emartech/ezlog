@@ -23,7 +23,7 @@ RSpec::Matchers.define :include_log_message do |expected|
   def expected_messages_from(object)
     @expected_messages ||= case object
                            when Hash
-                             object.map { |k, v| MultiJson.dump(k => v)[1...-1] }
+                             object.map { |k, v| JSON.dump(k => v)[1...-1] }
                            when String
                              [object]
                            else

@@ -42,6 +42,10 @@ RSpec.describe Ezlog::Rails::AccessLog do
       it 'logs only the whitelisted params' do
         expect { call }.to log params: {allowed: '1'}
       end
+
+      it 'logs all parameters serialized' do
+        expect { call }.to log params_serialized: '{\"allowed\"=>\"1\", \"not_allowed\"=>\"2\"}'
+      end
     end
 
     context 'when whitelisting is turned off' do
