@@ -1,3 +1,14 @@
+### 0.7.0 (2020-03-11)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.6.0...v0.7.0)
+
+* Features & enhancements
+  * Added the ability to configure parameter logging of the [Rails](https://rubyonrails.org/) access log.
+    By default, all parameters are logged under the key `params`. By turning on the `log_only_whitelisted_params`
+    config swith, you can make sure that only the parameters whose name is included in the `whitelisted_params`
+    config setting get logged under the `params` key. All parameters will still be logged, but serialized into a
+    single string under the `params_seralized` key, not creating a lot of noise under `params`.
+
 ### 0.6.0 (2019-11-29)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.5.3...v0.6.0)

@@ -119,6 +119,21 @@ With Ezlog:
 {"logger":"AccessLog","timestamp":"2019-06-08T08:49:31+02:00","level":"INFO","hostname":"MacbookPro.local","pid":75463,"environment":"development","request_id":"9a43631b-284c-4677-9d08-9c1cc5c7d3a7","duration_sec":0.031,"message":"GET /welcome?subsession_id=34ea8596f9764f475f81158667bc2654 - 200 (OK)","remote_ip":"127.0.0.1","method":"GET","path":"/welcome?subsession_id=34ea8596f9764f475f81158667bc2654","params":{"subsession_id":"34ea8596f9764f475f81158667bc2654","controller":"pages","action":"welcome"},"response_status_code":200}
 ```
 
+By default, Ezlog logs all request parameters as a hash (JSON object) under the `params` key. This is very convenient
+in a structured logging system and makes it easy to search for specific request parameter values e.g. in ElasticSearch
+(should you happen to store your logs there). Unfortunately, in some cases - such as when handling large forms - this
+can create quite a bit of noise and impact the searchability of your logs negatively. For this reason, you have the
+option to restrict which parameters get logged by adding something like the following to your application's configuration:
+
+```ruby
+config.ezlog.log_only_whitelisted_params = true  # default is false
+config.ezlog.whitelisted_params = [:action]      # default is [:controller, :action]
+```
+
+Using this configuration, Ezlog will only log the `action` parameter under the `params` key, but will still log
+all parameters serialized into a single string under the key `params_serialized`. You won't lose any information,
+but you can make sure that only the relevant parameters of your requests are searchable (and thus protect your logs).
+
 #### The log level
 
 The logger's log level is determined as follows (in order of precedence):
