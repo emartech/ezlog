@@ -3,9 +3,10 @@ module Ezlog
     class AccessLog
       include LogContextHelper
 
-      def initialize(app, logger)
+      def initialize(app, logger, whitelisted_params)
         @app = app
         @logger = logger
+        @whitelisted_params = whitelisted_params&.map &:to_s
       end
 
       def call(env)
@@ -32,8 +33,16 @@ module Ezlog
                      remote_ip: request.remote_ip,
                      method: request.method,
                      path: request.filtered_path,
-                     params: request.filtered_parameters,
+                     params: params_to_log_in(request),
                      response_status_code: status
+      end
+
+      def params_to_log_in(request)
+        if @whitelisted_params.nil?
+          request.filtered_parameters
+        else
+          request.filtered_parameters.slice *@whitelisted_params
+        end
       end
     end
   end

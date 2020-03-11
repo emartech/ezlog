@@ -1,6 +1,7 @@
 RSpec.describe Ezlog::Rails::AccessLog do
   include_context 'Middleware' do
-    subject(:middleware) { described_class.new app, Ezlog.logger('AccessLog') }
+    subject(:middleware) { described_class.new app, Ezlog.logger('AccessLog'), whitelisted_params }
+    let(:whitelisted_params) { nil }
     let(:env) do
       {
         'REQUEST_METHOD' => 'GET',
@@ -32,6 +33,24 @@ RSpec.describe Ezlog::Rails::AccessLog do
     it 'logs the request duration' do
       allow(::Process).to receive(:clock_gettime).with(Process::CLOCK_MONOTONIC).and_return(1.0, 3.666666)
       expect { call }.to log duration_sec: 2.667
+    end
+
+    context 'when there are params that are not whitelisted' do
+      let(:whitelisted_params) { [:allowed] }
+      before { env['QUERY_STRING'] = 'allowed=1&not_allowed=2' }
+
+      it 'logs only the whitelisted params' do
+        expect { call }.to log params: {allowed: '1'}
+      end
+    end
+
+    context 'when whitelisting is turned off' do
+      let(:whitelisted_params) { nil }
+      before { env['QUERY_STRING'] = 'allowed=1&not_allowed=2' }
+
+      it 'logs all params' do
+        expect { call }.to log params: {allowed: '1', not_allowed: '2'}
+      end
     end
 
     context 'when the params contain sensitive information' do
