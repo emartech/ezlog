@@ -3,6 +3,7 @@ module Ezlog
     class JobContext
       class << self
         def from_job_hash(job_hash)
+          return {} if job_hash.nil?
           basic_info_from(job_hash).merge named_arguments_from(job_hash)
         end
 

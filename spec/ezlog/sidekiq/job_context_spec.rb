@@ -43,5 +43,13 @@ RSpec.describe Ezlog::Sidekiq::JobContext do
         expect(job_message).to include worker: 'TestWorker'
       end
     end
+
+    context 'when the job hash is empty' do
+      let(:job_hash) { nil }
+
+      it 'returns an empty Hash' do
+        expect(job_message).to eq({})
+      end
+    end
   end
 end
