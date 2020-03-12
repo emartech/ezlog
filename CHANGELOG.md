@@ -1,3 +1,11 @@
+### 0.7.1 (2020-03-12)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.7.0...v0.7.1)
+
+* Bug fixes
+  * Fixed a bug in the [Sidekiq](https://github.com/mperham/sidekiq) error handler which caused the error handler
+    to throw an additional error if there was no job hash in the original error context.
+
 ### 0.7.0 (2020-03-11)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.6.0...v0.7.0)
