@@ -1,3 +1,15 @@
+### 0.8.0 (2020-04-07)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.7.1...v0.8.0)
+
+* Bug fixes
+  * Reverted the change introduced in `v0.5.2` which extended the [Sidekiq](https://github.com/mperham/sidekiq) logger
+    interface because it caused problems with other third-party integrations
+    (e.g. [sidekiq-unique-jobs](https://github.com/mhenrixon/sidekiq-unique-jobs)).
+    [Sidekiq](https://github.com/mperham/sidekiq) itself removed this interface element in `v6.0.1`, so the current
+    change breaks compatibility with [Sidekiq](https://github.com/mperham/sidekiq) `v6.0.0` exclusively. If you're
+    using that version, please upgrade.
+
 ### 0.7.1 (2020-03-12)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.7.0...v0.7.1)
