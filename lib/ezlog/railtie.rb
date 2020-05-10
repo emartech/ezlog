@@ -34,11 +34,21 @@ module Ezlog
     end
 
     config.after_initialize do
-      Ezlog::Rails::LogSubscriber.detach ::ActionController::LogSubscriber
-      Ezlog::Rails::LogSubscriber.detach ::ActionView::LogSubscriber
-      if defined? ::ActiveRecord
-        Ezlog::Rails::LogSubscriber.detach ::ActiveRecord::LogSubscriber
-        Ezlog::Rails::LogSubscriber.attach Ezlog::Rails::ActiveRecord::LogSubscriber, :active_record
+      case ::Rails::VERSION::MAJOR
+      when 6
+        ::ActionController::LogSubscriber.detach_from :action_controller
+        ::ActionView::LogSubscriber.detach_from :action_view
+        if defined? ::ActiveRecord
+          ::ActiveRecord::LogSubscriber.detach_from :active_record
+          Ezlog::Rails::LogSubscriber.attach Ezlog::Rails::ActiveRecord::LogSubscriber, :active_record
+        end
+      else
+        Ezlog::Rails::LogSubscriber.detach ::ActionController::LogSubscriber
+        Ezlog::Rails::LogSubscriber.detach ::ActionView::LogSubscriber
+        if defined? ::ActiveRecord
+          Ezlog::Rails::LogSubscriber.detach ::ActiveRecord::LogSubscriber
+          Ezlog::Rails::LogSubscriber.attach Ezlog::Rails::ActiveRecord::LogSubscriber, :active_record
+        end
       end
     end
 
