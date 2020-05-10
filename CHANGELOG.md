@@ -1,3 +1,11 @@
+### 0.9.1 (2020-05-10)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.0...v0.9.1)
+
+* Bug fixed
+  * Fixed a bug in access log exclusion pattern matching that would exclude partial matches for a path if it was 
+    specified as a string (expecting to be excluded only in case of a full match).
+
 ### 0.9.0 (2020-05-10)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.8.0...v0.9.0)
