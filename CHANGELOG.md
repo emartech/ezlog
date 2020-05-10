@@ -1,3 +1,12 @@
+### 0.9.0 (2020-05-10)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.8.0...v0.9.0)
+
+* Features & enhancements
+  * Ezlog now supports [Rails](https://rubyonrails.org/) 6.
+  * Added the ability to exclude certain paths from access logging. Use the `exclude_paths` configuration option to
+    add paths (strings or regexps) to exclude from your access logs.
+
 ### 0.8.0 (2020-04-07)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.7.1...v0.8.0)
