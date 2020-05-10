@@ -6,7 +6,7 @@
 Ezlog is intended to be a zero-configuration structured logging setup for pure Ruby or [Ruby on Rails](https://rubyonrails.org/) 
 projects using any (or all) of the following libraries or frameworks:
 
-* [Ruby on Rails](https://rubyonrails.org/)
+* [Ruby on Rails](https://rubyonrails.org/) (5.x and 6.x supported)
 * [Sidekiq](https://github.com/mperham/sidekiq)
 * [Sequel](https://sequel.jeremyevans.net/) 
 * [Rack::Timeout](https://github.com/heroku/rack-timeout)
@@ -133,6 +133,12 @@ config.ezlog.whitelisted_params = [:action]      # default is [:controller, :act
 Using this configuration, Ezlog will only log the `action` parameter under the `params` key, but will still log
 all parameters serialized into a single string under the key `params_serialized`. You won't lose any information,
 but you can make sure that only the relevant parameters of your requests are searchable (and thus protect your logs).
+
+Should you want to exclude certain paths (e.g. a healthcheck URL) from your access logs, you can use the following option:
+
+```ruby
+config.ezlog.exclude_paths = ['/healthcheck', %r(/monitoring/.*)]  # default is empty so everything gets logged
+```
 
 #### The log level
 
