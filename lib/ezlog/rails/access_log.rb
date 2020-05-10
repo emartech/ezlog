@@ -44,7 +44,14 @@ module Ezlog
       end
 
       def path_ignored?(request)
-        @config.exclude_paths.any? { |pattern| pattern.match? request.path }
+        @config.exclude_paths.any? do |pattern|
+          case pattern
+          when Regexp
+            pattern.match? request.path
+          else
+            pattern == request.path
+          end
+        end
       end
 
       def params_to_log(request)

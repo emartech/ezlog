@@ -96,6 +96,12 @@ RSpec.describe Ezlog::Rails::AccessLog do
           call
           log_output_is_expected.to be_empty
         end
+
+        it 'only ignores complete matches' do
+          env['PATH_INFO'] = '/'
+          call
+          log_output_is_expected.not_to be_empty
+        end
       end
 
       context 'and the ignored path is a regexp' do
