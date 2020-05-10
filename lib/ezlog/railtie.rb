@@ -4,7 +4,7 @@ module Ezlog
     config.ezlog.enable_sequel_logging = false
     config.ezlog.log_only_whitelisted_params = false
     config.ezlog.whitelisted_params = [:controller, :action]
-    config.ezlog.ignore_paths = []
+    config.ezlog.exclude_paths = []
 
     initializer "ezlog.initialize" do
       require "ezlog/rails/extensions"

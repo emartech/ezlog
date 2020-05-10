@@ -8,7 +8,7 @@ RSpec.describe Ezlog::Rails::AccessLog do
       {
         log_only_whitelisted_params: false,
         whitelisted_params: [:controller, :action],
-        ignore_paths: []
+        exclude_paths: []
       }
     end
     let(:env) do
@@ -90,7 +90,7 @@ RSpec.describe Ezlog::Rails::AccessLog do
 
     context 'when a path is ignored' do
       context 'and the ignored path is a string' do
-        before { config.ignore_paths << '/healthcheck' }
+        before { config.exclude_paths << '/healthcheck' }
 
         it 'does not log anything for that path' do
           call
@@ -99,7 +99,7 @@ RSpec.describe Ezlog::Rails::AccessLog do
       end
 
       context 'and the ignored path is a regexp' do
-        before { config.ignore_paths << %r(/healthcheck) }
+        before { config.exclude_paths << %r(/healthcheck) }
 
         it 'does not log anything for that path' do
           call
