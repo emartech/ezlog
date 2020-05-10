@@ -4,6 +4,7 @@ module Ezlog
     config.ezlog.enable_sequel_logging = false
     config.ezlog.log_only_whitelisted_params = false
     config.ezlog.whitelisted_params = [:controller, :action]
+    config.ezlog.ignore_paths = []
 
     initializer "ezlog.initialize" do
       require "ezlog/rails/extensions"
@@ -29,7 +30,7 @@ module Ezlog
     initializer 'ezlog.configure_rails_middlewares' do |app|
       app.config.middleware.insert_after ::ActionDispatch::RequestId, Ezlog::Rails::RequestLogContext
       app.config.middleware.delete ::Rails::Rack::Logger
-      app.config.middleware.insert_before ::ActionDispatch::DebugExceptions, Ezlog::Rails::AccessLog, Ezlog.logger('AccessLog'), whitelisted_params(app)
+      app.config.middleware.insert_before ::ActionDispatch::DebugExceptions, Ezlog::Rails::AccessLog, Ezlog.logger('AccessLog'), config.ezlog
       app.config.middleware.insert_after ::ActionDispatch::DebugExceptions, Ezlog::Rails::LogExceptions, Ezlog.logger('Application')
     end
 
@@ -71,10 +72,6 @@ module Ezlog
 
     def disable_rack_timeout_logging
       ::Rack::Timeout::Logger.logger = ::Logger.new(nil)
-    end
-
-    def whitelisted_params(app)
-      app.config.ezlog.log_only_whitelisted_params ? app.config.ezlog.whitelisted_params : nil
     end
   end
 end

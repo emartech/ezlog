@@ -3,10 +3,10 @@ module Ezlog
     class AccessLog
       include LogContextHelper
 
-      def initialize(app, logger, whitelisted_params)
+      def initialize(app, logger, config)
         @app = app
         @logger = logger
-        @whitelisted_params = whitelisted_params&.map &:to_s
+        @config = config
       end
 
       def call(env)
@@ -29,23 +29,29 @@ module Ezlog
       end
 
       def log_request(request, status)
+        return if path_ignored?(request)
+
         message = {
           message: '%s %s - %i (%s)' % [request.method, request.filtered_path, status, Rack::Utils::HTTP_STATUS_CODES[status]],
           remote_ip: request.remote_ip,
           method: request.method,
           path: request.filtered_path,
-          params: params_to_log_in(request),
+          params: params_to_log(request),
           response_status_code: status
         }
-        message.merge! params_serialized: request.filtered_parameters.inspect if @whitelisted_params
+        message.merge! params_serialized: request.filtered_parameters.inspect if @config.log_only_whitelisted_params
         @logger.info message
       end
 
-      def params_to_log_in(request)
-        if @whitelisted_params.nil?
-          request.filtered_parameters
+      def path_ignored?(request)
+        @config.ignore_paths.any? { |pattern| pattern.match? request.path }
+      end
+
+      def params_to_log(request)
+        if @config.log_only_whitelisted_params
+          request.filtered_parameters.slice *@config.whitelisted_params&.map(&:to_s)
         else
-          request.filtered_parameters.slice *@whitelisted_params
+          request.filtered_parameters
         end
       end
     end
