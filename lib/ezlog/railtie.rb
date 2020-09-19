@@ -67,6 +67,7 @@ module Ezlog
         config.options[:job_logger] = Ezlog::Sidekiq::JobLogger
         config.error_handlers << Ezlog::Sidekiq::ErrorLogger.new
         config.error_handlers.delete_if { |handler| handler.is_a? ::Sidekiq::ExceptionHandler::Logger }
+        config.death_handlers << Ezlog::Sidekiq::DeathLogger.new
       end
     end
 
