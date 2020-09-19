@@ -1,3 +1,12 @@
+### 0.9.2 (2020-09-19)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.1...v0.9.2)
+
+* Features & enhancements 
+  * Improvements of the [Sidekiq](https://github.com/mperham/sidekiq) integration
+    * supports additional job information: batch id, tags and thread id (bid, tags, tid)
+    * support logging "death" events (setting up a death_handler) 
+
 ### 0.9.1 (2020-05-10)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.0...v0.9.1)
