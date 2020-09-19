@@ -1,6 +1,9 @@
+require 'json'
+
 RSpec.describe Ezlog::LoggingLayout do
-  let(:layout) { described_class.new(context) }
+  let(:layout) { described_class.new(context, options) }
   let(:context) { {} }
+  let(:options) { {} }
 
   let(:message) { 'Hello, World!' }
   let(:logger_name) { 'TestLogger' }
@@ -16,20 +19,29 @@ RSpec.describe Ezlog::LoggingLayout do
   describe '#format' do
     subject(:format) { layout.format(event) }
 
-    it { is_expected.to json_include 'timestamp' => event.time.iso8601 }
+    it { is_expected.to json_include 'message' => message }
+    it { is_expected.to json_include 'timestamp' => event.time.iso8601(3) }
     it { is_expected.to json_include 'level' => level_name.upcase }
     it { is_expected.to json_include 'logger' => logger_name }
     it { is_expected.to json_include 'hostname' => Socket.gethostname }
     it { is_expected.to json_include 'pid' => Process.pid }
     it { is_expected.to match(/\n$/) }
 
+    context 'when level_formatter is provided' do
+      LEVELS_AS_NUMBERS = { 'debug' => 20, 'info' => 30, 'warn' => 40, 'error' => 50, 'fatal' => 60, 'unknown' => 70 }
+
+      before { options.merge!(level_formatter: ->(level_number) { (level_number + 2) * 10 }) }
+
+      it { is_expected.to json_include 'level' => LEVELS_AS_NUMBERS[level_name] }
+    end
+
     context 'when message context is given upon creation' do
-      let(:context) { {environment: 'test'} }
+      let(:context) { { environment: 'test' } }
 
       it { is_expected.to json_include 'environment' => 'test' }
 
       context 'when some part of the context is also present in the message' do
-        let(:message) { {environment: 'demo'} }
+        let(:message) { { environment: 'demo' } }
 
         it { is_expected.to json_include 'environment' => 'demo' }
       end
@@ -52,7 +64,7 @@ RSpec.describe Ezlog::LoggingLayout do
       let(:backtrace) { [] }
       before { message.set_backtrace(backtrace) }
 
-      it { is_expected.to json_include 'error' => {'class' => message.class.to_s, 'message' => message.message, 'backtrace' => message.backtrace} }
+      it { is_expected.to json_include 'error' => { 'class' => message.class.to_s, 'message' => message.message, 'backtrace' => message.backtrace } }
       it { is_expected.to json_include 'message' => message.message }
 
       context 'when the exception has no backtrace' do
@@ -83,7 +95,7 @@ RSpec.describe Ezlog::LoggingLayout do
       it { is_expected.to json_include Logging.mdc.context }
 
       context 'when some part of the context is also present in the message' do
-        let(:message) { {'X-Session' => 'qwe456'} }
+        let(:message) { { 'X-Session' => 'qwe456' } }
 
         it { is_expected.to json_include 'X-Session' => 'qwe456' }
       end
