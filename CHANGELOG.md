@@ -1,3 +1,20 @@
+### 0.9.3 (2020-09-20)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.2...v0.9.3)
+
+* Features & enhancements 
+    * Switching to [Oj](https://github.com/ohler55/oj) for fast JSON serialization
+    * Allow level to be formatted (so it can be logged as a number too)
+    
+        if you want to use Ougai-like numbers you can do something like this: 
+        ```ruby
+        config.ezlog.layout_options = { level_formatter: ->(level_number) { (level_number + 2) * 10 } } 
+        
+        Rails.logger.error('Boom!')
+        #=> {"logger":"Application","timestamp":"2020-09-20T19:29:03+02:00","level":50,"hostname":"BUD010256.local","pid":19872,"message":"Boom!"}
+        ``` 
+    * initial context (a context which will be added to every single line of log) can be configured via `config.ezlog.layout_options` and it defaults to `{environment: ::Rails.env}`
+    
 ### 0.9.2 (2020-09-19)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.1...v0.9.2)
