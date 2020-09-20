@@ -1,5 +1,5 @@
 require 'time'
-require 'json'
+require 'oj'
 
 module Ezlog
   class LoggingLayout < ::Logging::Layout
@@ -13,7 +13,7 @@ module Ezlog
       add_initial_context_to log_entry
       add_logging_context_to log_entry
       add_event_information_to log_entry, event
-      ::JSON.dump(log_entry) + "\n"
+      ::Oj.dump(log_entry, mode: :json) + "\n"
     end
 
     private
