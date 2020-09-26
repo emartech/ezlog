@@ -1,3 +1,13 @@
+### 0.9.4 (2020-09-26)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.3...v0.9.4)
+
+* Features & enhancements
+  * added Ruby 2.7 to the list of version CI will test the code with
+  * remove dot-files and Rakefile from the gem
+* Fix
+  * stop using `Hash#merge` with multiple arguments as it's only supported from Ruby 2.6
+
 ### 0.9.3 (2020-09-20)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.2...v0.9.3)
