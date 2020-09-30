@@ -37,7 +37,7 @@ module Ezlog
         end
 
         def method_parameters_of(job)
-          Kernel.const_get(job_class(job).to_sym).instance_method(:perform).parameters
+          Kernel.const_get(job_class(job)).instance_method(:perform).parameters
         end
 
         def job_class(job)

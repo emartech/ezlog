@@ -44,6 +44,19 @@ RSpec.describe Ezlog::Sidekiq::JobContext do
       end
     end
 
+    context 'when the job is in a module' do
+      before { job_hash.merge! 'class' => 'TestWorkers::TestWorker', 'args' => [667, 1024] }
+
+      it 'contains the wrapped job class' do
+        expect(job_message).to include worker: 'TestWorkers::TestWorker'
+      end
+
+      it 'contains the arguments' do
+        expect(job_message).to include export_id: 667,
+                                       max_size: 1024
+      end
+    end
+
     context 'when the job is part of a batch' do
       before { job_hash['bid'] = 'aBatchId' }
 

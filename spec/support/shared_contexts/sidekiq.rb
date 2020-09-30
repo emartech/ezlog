@@ -14,6 +14,12 @@ RSpec.shared_context 'Sidekiq' do
     def perform(customer_id, name) end
   end
 
+  module TestWorkers
+    class TestWorker
+      def perform(export_id, max_size) end
+    end
+  end
+
   def sidekiq_job_hash(jid: 'job id',
                        bid: nil,
                        tags: nil,
