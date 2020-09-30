@@ -1,3 +1,11 @@
+### 0.9.5 (2020-10-1)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.4...v0.9.5)
+
+* Fix
+  * fixing an issue with the Sidekiq job's log context generation:
+    using a namespaced Sidekiq worker (`SomeModule::SomeWorker`) cause the log context generations to fail with: `NameError: wrong constant name SomeModule::SomeWorker`
+
 ### 0.9.4 (2020-09-26)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.3...v0.9.4)
