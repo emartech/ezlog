@@ -11,11 +11,18 @@ RSpec.shared_context 'Sidekiq' do
   end
 
   class TestWorker
-    def perform(customer_id, name)
+    def perform(customer_id, name) end
+  end
+
+  module TestWorkers
+    class TestWorker
+      def perform(export_id, max_size) end
     end
   end
 
   def sidekiq_job_hash(jid: 'job id',
+                       bid: nil,
+                       tags: nil,
                        queue: 'job queue',
                        worker: 'TestWorker',
                        args: [],
@@ -23,11 +30,13 @@ RSpec.shared_context 'Sidekiq' do
                        enqueued_at: Time.now)
     {
       'jid' => jid,
+      'bid' => bid,
+      'tags' => tags,
       'queue' => queue,
       'class' => worker,
       'args' => args,
       'created_at' => created_at,
       'enqueued_at' => enqueued_at
-    }
+    }.compact
   end
 end

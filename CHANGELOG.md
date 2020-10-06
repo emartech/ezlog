@@ -1,3 +1,47 @@
+### 0.9.5 (2020-10-1)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.4...v0.9.5)
+
+* Fix
+  * fixing an issue with the Sidekiq job's log context generation:
+    using a namespaced Sidekiq worker (`SomeModule::SomeWorker`) cause the log context generations to fail with: `NameError: wrong constant name SomeModule::SomeWorker`
+
+### 0.9.4 (2020-09-26)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.3...v0.9.4)
+
+* Features & enhancements
+  * added Ruby 2.7 to the list of version CI will test the code with
+  * remove dot-files and Rakefile from the gem
+* Fix
+  * stop using `Hash#merge` with multiple arguments as it's only supported from Ruby 2.6
+
+### 0.9.3 (2020-09-20)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.2...v0.9.3)
+
+* Features & enhancements 
+    * Switching to [Oj](https://github.com/ohler55/oj) for fast JSON serialization
+    * Allow level to be formatted (so it can be logged as a number too)
+    
+        if you want to use Ougai-like numbers you can do something like this: 
+        ```ruby
+        config.ezlog.layout_options = { level_formatter: ->(level_number) { (level_number + 2) * 10 } } 
+        
+        Rails.logger.error('Boom!')
+        #=> {"logger":"Application","timestamp":"2020-09-20T19:29:03+02:00","level":50,"hostname":"BUD010256.local","pid":19872,"message":"Boom!"}
+        ``` 
+    * initial context (a context which will be added to every single line of log) can be configured via `config.ezlog.layout_options` and it defaults to `{environment: ::Rails.env}`
+    
+### 0.9.2 (2020-09-19)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.1...v0.9.2)
+
+* Features & enhancements 
+  * Improvements of the [Sidekiq](https://github.com/mperham/sidekiq) integration
+    * supports additional job information: batch id, tags and thread id (bid, tags, tid)
+    * support logging "death" events (setting up a death_handler) 
+
 ### 0.9.1 (2020-05-10)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.0...v0.9.1)

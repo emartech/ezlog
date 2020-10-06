@@ -44,6 +44,51 @@ RSpec.describe Ezlog::Sidekiq::JobContext do
       end
     end
 
+    context 'when the job is in a module' do
+      before { job_hash.merge! 'class' => 'TestWorkers::TestWorker', 'args' => [667, 1024] }
+
+      it 'contains the wrapped job class' do
+        expect(job_message).to include worker: 'TestWorkers::TestWorker'
+      end
+
+      it 'contains the arguments' do
+        expect(job_message).to include export_id: 667,
+                                       max_size: 1024
+      end
+    end
+
+    context 'when the job is part of a batch' do
+      before { job_hash['bid'] = 'aBatchId' }
+
+      it 'contains the batch id' do
+        expect(job_message).to include bid: 'aBatchId'
+      end
+    end
+
+    context 'when the job has tags' do
+      before { job_hash['tags'] = %w[a-tag b-tag] }
+
+      it 'contains the batch id' do
+        expect(job_message).to include tags: %w[a-tag b-tag]
+      end
+    end
+
+    context "when Sidekiq's thread id of is set on the current thread" do
+      before { Thread.current['sidekiq_tid'] = '[the thread id]' }
+
+      it 'contains the thread id of the worker' do
+        expect(job_message).to include tid: '[the thread id]'
+      end
+    end
+
+    context "when Sidekiq's thread id is not set on the current thread" do
+      before { Thread.current['sidekiq_tid'] = nil }
+
+      it 'calculates a thread id' do
+        expect(job_message).to include tid: (Thread.current.object_id ^ ::Process.pid).to_s(36)
+      end
+    end
+
     context 'when the job hash is empty' do
       let(:job_hash) { nil }
 

@@ -4,13 +4,18 @@ module Ezlog
       class << self
         def from_job_hash(job_hash)
           return {} if job_hash.nil?
-          basic_info_from(job_hash).merge named_arguments_from(job_hash)
+          thread_info.merge(basic_info_from(job_hash)).merge(named_arguments_from(job_hash))
         end
 
         private
 
+        def thread_info
+          { tid: Thread.current['sidekiq_tid'] || (Thread.current.object_id ^ ::Process.pid).to_s(36) }
+        end
+
+
         def basic_info_from(job)
-          {
+          h = {
             jid: job['jid'],
             queue: job['queue'],
             worker: job_class(job),
@@ -18,6 +23,9 @@ module Ezlog
             enqueued_at: job['enqueued_at'],
             run_count: (job['retry_count'] || -1) + 2
           }
+          h[:bid] = job['bid'] if job['bid']
+          h[:tags] = job['tags'] if job['tags']
+          h
         end
 
         def named_arguments_from(job)
@@ -29,7 +37,7 @@ module Ezlog
         end
 
         def method_parameters_of(job)
-          Kernel.const_get(job_class(job).to_sym).instance_method(:perform).parameters
+          Kernel.const_get(job_class(job)).instance_method(:perform).parameters
         end
 
         def job_class(job)

@@ -5,13 +5,17 @@ module Ezlog
     config.ezlog.log_only_whitelisted_params = false
     config.ezlog.whitelisted_params = [:controller, :action]
     config.ezlog.exclude_paths = []
+    config.ezlog.initial_context = { environment: ::Rails.env }
+    config.ezlog.layout_options = {}
 
     initializer "ezlog.initialize" do
       require "ezlog/rails/extensions"
     end
 
     initializer 'ezlog.configure_logging' do |app|
-      ::Logging.logger.root.appenders = ::Logging.appenders.stdout 'stdout', layout: Ezlog::LoggingLayout.new(environment: ::Rails.env)
+      ::Logging.logger.root.appenders =
+        ::Logging.appenders.stdout 'stdout', layout: Ezlog::LoggingLayout.new(app.config.ezlog.initial_context,
+                                                                              app.config.ezlog.layout_options)
       ::Logging.logger.root.level = app.config.log_level
     end
 
@@ -67,6 +71,7 @@ module Ezlog
         config.options[:job_logger] = Ezlog::Sidekiq::JobLogger
         config.error_handlers << Ezlog::Sidekiq::ErrorLogger.new
         config.error_handlers.delete_if { |handler| handler.is_a? ::Sidekiq::ExceptionHandler::Logger }
+        config.death_handlers << Ezlog::Sidekiq::DeathLogger.new
       end
     end
 
