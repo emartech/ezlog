@@ -1,4 +1,11 @@
-### 0.9.5 (2020-10-1)
+### 0.9.6 (2021-06-30)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.5...v0.9.6)
+
+* Fix
+  * fixing a Rails 6.1 specific issue with ActiveRecord array parameter in a query (`User.where(id: [1,2,3,4])`)
+
+### 0.9.5 (2020-10-01)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.4...v0.9.5)
 
