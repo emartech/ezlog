@@ -26,10 +26,9 @@ RSpec.describe Ezlog::Rails::ActiveRecord::LogSubscriber do
                         payload: {
                           name: 'User Load',
                           sql: 'SELECT * FROM users LIMIT $1',
-                          binds: [instance_double(ActiveRecord::Relation::QueryAttribute,
-                                                  name: 'LIMIT',
-                                                  value: 1,
-                                                  type: instance_double(ActiveModel::Type::Value, binary?: false))],
+                          binds: [ActiveRecord::Relation::QueryAttribute.new('LIMIT',
+                                                                             1,
+                                                                             instance_double(ActiveModel::Type::Value, binary?: false))],
                           type_casted_binds: [1]
                         },
                         duration: 1.235
@@ -45,10 +44,9 @@ RSpec.describe Ezlog::Rails::ActiveRecord::LogSubscriber do
                           payload: {
                             name: 'User Load',
                             sql: 'SELECT * FROM users WHERE bytecode = $1',
-                            binds: [instance_double(ActiveRecord::Relation::QueryAttribute,
-                                                    name: 'bytecode',
-                                                    value: 'some binary value',
-                                                    type: instance_double(ActiveModel::Type::Value, binary?: true))],
+                            binds: [ActiveRecord::Relation::QueryAttribute.new('bytecode',
+                                                                               'some binary value',
+                                                                               instance_double(ActiveModel::Type::Value, binary?: true))],
                             type_casted_binds: ['some binary value']
                           },
                           duration: 1.235
@@ -65,10 +63,9 @@ RSpec.describe Ezlog::Rails::ActiveRecord::LogSubscriber do
                           payload: {
                             name: 'User Load',
                             sql: 'SELECT * FROM users LIMIT $1',
-                            binds: [instance_double(ActiveRecord::Relation::QueryAttribute,
-                                                    name: 'LIMIT',
-                                                    value: 1,
-                                                    type: instance_double(ActiveModel::Type::Value, binary?: false))],
+                            binds: [ActiveRecord::Relation::QueryAttribute.new('LIMIT',
+                                                                                1,
+                                                                                instance_double(ActiveModel::Type::Value, binary?: false))],
                             type_casted_binds: -> { [1] }
                           },
                           duration: 1.235
@@ -76,6 +73,23 @@ RSpec.describe Ezlog::Rails::ActiveRecord::LogSubscriber do
 
         it 'logs the query parameter values correctly' do
           expect { trigger_event }.to log(params: {LIMIT: 1}).at_level(:debug)
+        end
+      end
+
+      context 'when the parameter is an Array' do
+        let(:event) do
+          instance_double ActiveSupport::Notifications::Event,
+                          payload: {
+                            name: 'User Load',
+                            sql: 'SELECT * FROM users WHERE users.id IN ($1, $2, $3, $4)',
+                            binds: [1, 2, 3, 4],
+                            type_casted_binds: [1, 2, 3, 4]
+                          },
+                          duration: 1.235
+        end
+
+        it 'logs the query parameter values correctly' do
+          expect { trigger_event }.to log(params: [1, 2, 3, 4]).at_level(:debug)
         end
       end
     end

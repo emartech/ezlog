@@ -33,6 +33,8 @@ module Ezlog
           end
 
           Hash[param_value_pairs]
+        rescue NoMethodError
+          params
         end
 
         def type_casted_values_from(event)
