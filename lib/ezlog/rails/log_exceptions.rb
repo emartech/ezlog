@@ -9,8 +9,14 @@ module Ezlog
       def call(env)
         @app.call(env)
       rescue Exception => exception
-        @logger.error exception
+        @logger.error exception unless handled?(exception)
         raise
+      end
+
+      private
+
+      def handled?(exception)
+        ActionDispatch::ExceptionWrapper.rescue_responses.key? exception.class.name
       end
     end
   end

@@ -55,3 +55,5 @@ RSpec::Matchers.define :log do
     log_output_is_expected.to include_log_message(expected).at_level(log_level)
   end
 end
+
+RSpec::Matchers.define_negated_matcher :not_log, :log

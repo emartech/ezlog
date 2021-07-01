@@ -93,6 +93,7 @@ In addition to this, Ezlog also does the following:
 * It disables Rails's default logging of uncaught errors and injects its own error logger into the application, which
   * logs 1 line per error, including the error's name and context (stack trace, etc.),
   * logs every error at ERROR level instead of the default FATAL.
+  * does not log exceptions which are handled by Rails (`ActionDispatch::ExceptionWrapper.rescue_responses`)
 * It disables Rails's default request logging, which logs several lines per event during the processing of an action,
   and replaces the default Rack access log with its own access log middleware. The end result is an access log that
   * contains all relevant information (request ID, method, path, params, client IP, duration and response status code), and
