@@ -1,3 +1,10 @@
+### 0.10.0 (2021-07-01)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.6...v0.10.0)
+
+* Features & enhancements
+  * Do not log exceptions which are handled by Rails. Therefore you can't get false alarms from your exception notifier
+
 ### 0.9.6 (2021-06-30)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.5...v0.9.6)
