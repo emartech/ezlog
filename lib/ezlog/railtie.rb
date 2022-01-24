@@ -42,7 +42,10 @@ module Ezlog
       case ::Rails::VERSION::MAJOR
       when 6
         ::ActionController::LogSubscriber.detach_from :action_controller
-        ::ActionView::LogSubscriber.detach_from :action_view
+        if defined? ::ActionView
+          require 'action_view/log_subscriber' unless defined? ::ActionView::LogSubscriber
+          ::ActionView::LogSubscriber.detach_from :action_view
+        end
         if defined? ::ActiveRecord
           ::ActiveRecord::LogSubscriber.detach_from :active_record
           Ezlog::Rails::LogSubscriber.attach Ezlog::Rails::ActiveRecord::LogSubscriber, :active_record

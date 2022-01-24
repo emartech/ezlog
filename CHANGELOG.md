@@ -1,3 +1,11 @@
+### 0.10.1 (2022-01-22)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.10.0...v0.10.1)
+
+* Fix
+  * Fixed a bug where `ActionView::LogSubscriber` was potentially not (eager)loaded by the time we tried to detach it.
+    With this fix Rails 6.1 running on Ruby 3 should be fully supported.
+
 ### 0.10.0 (2021-07-01)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.9.6...v0.10.0)
