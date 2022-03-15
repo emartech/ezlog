@@ -40,7 +40,7 @@ module Ezlog
 
     config.after_initialize do
       case ::Rails::VERSION::MAJOR
-      when 6
+      when 6, 7
         ::ActionController::LogSubscriber.detach_from :action_controller
         if defined? ::ActionView
           require 'action_view/log_subscriber' unless defined? ::ActionView::LogSubscriber

@@ -3,7 +3,7 @@ RSpec.describe Ezlog::Rails::LogSubscriber do
     ActiveSupport::Notifications.notifier.listeners_for event
   end
 
-  describe '.detach' do
+  xdescribe '.detach' do
     subject(:detach) { Ezlog::Rails::LogSubscriber.detach ActionController::LogSubscriber }
     after { ActionController::LogSubscriber.attach_to :action_controller }
 
