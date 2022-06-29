@@ -1,3 +1,17 @@
+### 0.10.3 (2022-06-29)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.10.2...v0.10.3)
+
+* Fix
+  * Fixed a bug where `Sidekiq::Logger` was potentially initialized too many times, which could result in an `undefined method 'info'` error message.
+
+### 0.10.2 (2022-06-29)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.10.1...v0.10.2)
+
+* Features & enhancements
+  * Sidekiq 6.5 compatibility
+  
 ### 0.10.1 (2022-01-22)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.10.0...v0.10.1)
