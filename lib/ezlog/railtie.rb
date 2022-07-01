@@ -71,7 +71,7 @@ module Ezlog
       ::Sidekiq.logger = Ezlog.logger('Sidekiq')
       ::Sidekiq.logger.level = app.config.log_level
       ::Sidekiq.configure_server do |config|
-        config.options[:job_logger] = Ezlog::Sidekiq::JobLogger
+        config[:job_logger] = Ezlog::Sidekiq::JobLogger
         config.error_handlers << Ezlog::Sidekiq::ErrorLogger.new
         if defined?(::Sidekiq::ExceptionHandler) && defined?(::Sidekiq::ExceptionHandler::Logger)
           config.error_handlers.delete_if { |handler| handler.is_a? ::Sidekiq::ExceptionHandler::Logger }
