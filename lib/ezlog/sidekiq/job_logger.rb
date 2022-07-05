@@ -22,14 +22,6 @@ module Ezlog
         yield
       end
 
-      def prepare(job_hash, &_block)
-        old_log_level = logger.level
-        logger.level = job_hash['log_level'] || logger.level
-        yield
-      ensure
-        logger.level = old_log_level
-      end
-
       private
 
       def benchmark
