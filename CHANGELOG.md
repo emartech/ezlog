@@ -1,10 +1,11 @@
-### 0.10.3 (2022-06-29)
+### 0.10.4 (2022-07-06)
 
-[Full Changelog](https://github.com/emartech/ezlog/compare/v0.10.2...v0.10.3)
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.10.3...v0.10.4)
 
 * Fix
-  * Fixed a bug where `Sidekiq::Logger` was potentially initialized too many times, which could result in an `undefined method 'info'` error message.
-
+  * Removed support for "job-specific log level" feature in Sidekiq.
+  * Fixed the bug which could result in an `undefined method 'info'` error message.
+  
 ### 0.10.2 (2022-06-29)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.10.1...v0.10.2)
