@@ -1,3 +1,11 @@
+### 0.10.5 (2022-07-06)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.10.4...v0.10.5)
+
+* Fix
+  * Support newer versions of Sidekiq
+
+
 ### 0.10.4 (2022-07-06)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.10.3...v0.10.4)
