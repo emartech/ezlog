@@ -21,6 +21,7 @@ module Ezlog
       def with_job_hash_context(_job_hash, &_block)
         yield
       end
+      alias prepare with_job_hash_context
 
       private
 
