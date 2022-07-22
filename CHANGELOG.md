@@ -1,4 +1,11 @@
-### 0.10.6 (2022-07-22)
+### 0.10.7 (2022-07-22)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.10.6...v0.10.7)
+
+* Fix
+  * Fix sidekiq backward compatibility bug, introduced with 0.10.6 version. 
+
+### 0.10.6 (2022-07-22), yanked
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.10.5...v0.10.6)
 
