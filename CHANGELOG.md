@@ -1,3 +1,10 @@
+### 0.10.6 (2022-07-22)
+
+[Full Changelog](https://github.com/emartech/ezlog/compare/v0.10.5...v0.10.6)
+
+* Features & enhancements
+  * Use new syntax for config to remove deprecation warnings
+
 ### 0.10.5 (2022-07-06)
 
 [Full Changelog](https://github.com/emartech/ezlog/compare/v0.10.4...v0.10.5)
