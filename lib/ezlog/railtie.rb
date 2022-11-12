@@ -68,19 +68,19 @@ module Ezlog
     private
 
     def initialize_sidekiq_logging(app)
-      ::Sidekiq.logger = Ezlog.logger('Sidekiq')
-      ::Sidekiq.logger.level = app.config.log_level
-      ::Sidekiq.configure_server do |config|
-        if config.respond_to? :[]
-          config[:job_logger] = Ezlog::Sidekiq::JobLogger
-        else
-          config.options[:job_logger] = Ezlog::Sidekiq::JobLogger
-        end
-        config.error_handlers << Ezlog::Sidekiq::ErrorLogger.new
-        if defined?(::Sidekiq::ExceptionHandler) && defined?(::Sidekiq::ExceptionHandler::Logger)
-          config.error_handlers.delete_if { |handler| handler.is_a? ::Sidekiq::ExceptionHandler::Logger }
-        end
-        config.death_handlers << Ezlog::Sidekiq::DeathLogger.new
+      ::Sidekiq.configure_server do |sidekiq_config|
+        sidekiq_config.logger = Ezlog.logger('Sidekiq')
+        sidekiq_config.logger.level = app.config.log_level
+          if sidekiq_config.respond_to? :[]
+            sidekiq_config[:job_logger] = Ezlog::Sidekiq::JobLogger
+          else
+            sidekiq_config.options[:job_logger] = Ezlog::Sidekiq::JobLogger
+          end
+          sidekiq_config.error_handlers << Ezlog::Sidekiq::ErrorLogger.new
+          if defined?(::Sidekiq::ExceptionHandler) && defined?(::Sidekiq::ExceptionHandler::Logger)
+            sidekiq_config.error_handlers.delete_if { |handler| handler.is_a? ::Sidekiq::ExceptionHandler::Logger }
+          end
+          sidekiq_config.death_handlers << Ezlog::Sidekiq::DeathLogger.new
       end
     end
 
