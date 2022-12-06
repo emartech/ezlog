@@ -1,5 +1,8 @@
 # Ezlog
 
+## ⚠️ This repository is no longer actively maintained. 
+#### ⚠️ For Rails 7 support please check: [Logcraft](https://github.com/zormandi/logcraft)
+
 [![Gem Version](https://badge.fury.io/rb/ezlog.svg)](https://badge.fury.io/rb/ezlog)
 [![Build Status](https://travis-ci.com/emartech/ezlog.svg?branch=master)](https://travis-ci.com/emartech/ezlog)
 
